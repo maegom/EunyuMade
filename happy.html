@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="HAPPY : 함께라서 즐거운 순간들 — 은유제작소 PROJECT 001">
+  <title>HAPPY : 함께라서 즐거운 순간들 | EUNYU MADE</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="container nav">
+    <a href="index.html" class="brand"><img data-logo alt="은유제작소"></a>
+    <nav class="nav-links">
+      <a href="index.html">HOME</a>
+      <a href="#story">STORY</a>
+      <a href="#experience">EXPERIENCE</a>
+      <a href="#web-play">WEB PLAY</a>
+    </nav>
+    <button class="menu-btn" aria-label="메뉴 열기">☰</button>
+  </div>
+</header>
+
+<main>
+  <section class="happy-hero">
+    <div class="container happy-grid">
+      <div>
+        <div class="eyebrow">EUNYU MADE · PROJECT 001</div>
+        <h1>HAPPY</h1>
+        <h2>함께라서 즐거운 순간들</h2>
+        <p class="section-copy">사람과 반려동물이 함께하면서 생기는 평범하고 즐거운 순간들을 로봇, 게임, 화면, 소리와 촉감으로 표현합니다.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#experience">경험 살펴보기</a>
+          <a class="btn soft" href="#web-play">웹에서 잠깐 놀기</a>
+        </div>
+      </div>
+      <img data-img="happyMain" alt="HAPPY 프로젝트">
+    </div>
+  </section>
+
+  <section class="section" id="story">
+    <div class="container">
+      <div class="eyebrow">WHY HAPPY?</div>
+      <h2 class="section-title">별일 없는 하루가<br>그래서 더 좋은 하루였습니다.</h2>
+      <p class="section-copy">HAPPY는 실제 반려견 ‘해피’와 함께했던 일상에서 시작했습니다. 손을 내밀고, 쓰다듬고, 산책하고, 간식을 주고, 같이 쉬었던 작은 순간들. 우리는 그 평범한 교감과 즐거움을 기술로 다시 표현해보고 싶었습니다.</p>
+    </div>
+  </section>
+
+  <section class="section" id="experience" style="background:var(--bg)">
+    <div class="container">
+      <div class="eyebrow">EXPERIENCE</div>
+      <h2 class="section-title">해피를 만나고,<br>놀고, 함께 느껴봅니다.</h2>
+      <div class="experience-grid">
+        <article class="experience"><span class="eyebrow">TOUCH</span><strong>HELLO, HAPPY!</strong><p>몸 옆에 붙은 팔이 위아래로 회전하며 손을 내밀고, 화면 속 표정과 움직임으로 반응하는 고정형 로봇입니다.</p></article>
+        <article class="experience"><span class="eyebrow">PLAY</span><strong>POCKET HAPPY</strong><p>공 던지기, 간식 주기, 피하기 등 자이로·버튼·터치·진동으로 즐기는 작은 디지털 펫입니다.</p></article>
+        <article class="experience"><span class="eyebrow">FEEL</span><strong>A DAY WITH HAPPY</strong><p>모니터 위 카메라와 작은 진동 컨트롤러를 이용해 화면 속 해피와 쓰다듬고 놀며 하루를 보내는 인터랙티브 경험입니다.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section web-playground" id="web-play">
+    <div class="container play-wrap">
+      <div>
+        <div class="eyebrow">MINI WEB EXPERIENCE</div>
+        <h2 class="section-title">웹에서도<br>해피와 잠깐 놀아보세요.</h2>
+        <p class="section-copy">실제 전시의 축소판입니다. 마우스를 해피에게 가까이 가져가 쓰다듬거나, 공을 옮겨보고, 아래 버튼으로 작은 행동을 해보세요.</p>
+        <div class="play-buttons">
+          <button data-action="pet">쓰다듬기</button>
+          <button data-action="snack">간식 주기</button>
+          <button data-action="walk">산책 가기</button>
+        </div>
+        <div class="play-status" id="playStatus">마우스로 해피에게 손을 가져가 보세요.</div>
+      </div>
+
+      <div class="play-stage" id="playStage">
+        <div class="cloud c1"></div><div class="cloud c2"></div><div class="tree"></div>
+        <div class="dog" id="webDog">
+          <div class="tail"></div>
+          <div class="dog-body"></div>
+          <div class="dog-head">
+            <div class="ear left"></div><div class="ear right"></div>
+            <div class="eye left"></div><div class="eye right"></div>
+            <div class="nose"></div><div class="mouth"></div>
+          </div>
+          <div class="paw p1"></div><div class="paw p2"></div>
+        </div>
+        <div class="ball" id="ball" title="공을 드래그해 보세요"></div>
+        <div class="hand-pointer" id="handPointer">✋</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow">MAKING</div>
+      <h2 class="section-title">아이디어에서<br>실제 경험까지.</h2>
+      <p class="section-copy">ESP32 기반 제어, 거리·터치 센서, 서보모터, LCD 캐릭터 애니메이션, 자이로와 진동, 카메라 기반 인터랙션, 3D 프린팅 외형을 하나의 경험으로 연결합니다.</p>
+      <div class="image-guide">
+        <b>HAPPY 대표 이미지 교체:</b> <code>assets/images/happy-project-main.png</code><br>
+        외부 이미지 URL도 가능합니다. <code>site-config.js</code>에서 <code>happyMain</code> 값을 수정하세요.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-grid">
+    <div><div class="footer-brand">은유제작소 · EUNYU MADE</div><div class="small">Made from thoughts.</div></div>
+    <div class="footer-links"><a href="index.html">HOME</a><a data-link="instagram">Instagram</a><a data-link="youtube">YouTube</a></div>
+  </div>
+</footer>
+
+<script src="site-config.js"></script>
+<script src="script.js"></script>
+<script src="happy.js"></script>
+</body>
+</html>
