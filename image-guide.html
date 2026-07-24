@@ -1,18 +1,32 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>이미지 교체 가이드</title><link rel="stylesheet" href="styles.css"></head>
-<body><main class="section"><div class="container">
-<div class="eyebrow">EUNYU MADE · EDIT GUIDE</div>
-<h1 class="section-title">이미지와 링크를<br>쉽게 바꾸는 방법</h1>
-<p class="section-copy">사이트의 대부분 이미지와 링크는 <b>site-config.js</b> 한 파일에서 관리합니다.</p>
-<div class="projects-grid">
-<article class="card"><img src="assets/images/happy-project-main.png"><div class="card-body"><h3>HAPPY 대표 이미지</h3><p><code>assets/images/happy-project-main.png</code> 파일을 같은 이름으로 교체하거나 <code>images.happyMain</code> 값을 수정하세요.</p></div></article>
-<article class="card"><img src="assets/logo/eunyu-logo.svg"><div class="card-body"><h3>은유제작소 로고</h3><p><code>assets/logo/eunyu-logo.svg</code> 파일을 교체하거나 <code>brand.logo</code> 값을 수정하세요.</p></div></article>
-</div>
-<div class="image-guide">
-<b>외부 이미지 링크 예시</b><br>
-<code>happyMain: "https://example.com/my-happy-image.jpg"</code><br><br>
-<b>Instagram / YouTube / GitHub</b><br>
-<code>site-config.js → links</code>에서 # 부분을 실제 주소로 바꾸세요.
-</div>
-<p style="margin-top:30px"><a class="btn primary" href="index.html">홈페이지로 돌아가기</a></p>
-</div></main></body></html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>은유제작소 이미지/링크 교체 가이드</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="section"><div class="container">
+  <div class="eyebrow">EUNYU MADE · EDIT GUIDE</div>
+  <h1 class="section-title">이미지와 링크를<br>쉽게 바꾸는 방법</h1>
+  <p class="section-copy">사이트의 주요 이미지와 외부 링크는 <b>site-config.js</b> 한 파일에서 관리합니다.</p>
+
+  <div class="projects-grid">
+    <article class="card"><img src="assets/images/happy-project-main.png"><div class="card-body"><h3>HAPPY 대표 이미지</h3><p><code>assets/images/happy-project-main.png</code> 파일을 교체하거나 <code>images.happyMain</code> 값을 수정하세요.</p></div></article>
+    <article class="card"><img src="assets/logo/eunyu-logo.png" style="object-fit:contain;background:#f4eadc"><div class="card-body"><h3>은유제작소 PNG 로고</h3><p><code>assets/logo/eunyu-logo.png</code> 파일을 원하는 PNG 로고로 덮어쓰면 됩니다.</p></div></article>
+  </div>
+
+  <div style="margin-top:30px;padding:22px;border:1px solid var(--line);border-radius:18px;background:white">
+    <b>링크 수정</b>
+    <pre style="white-space:pre-wrap">links: {
+  happy: "/happy",
+  blog: "블로그 주소",
+  instagram: "인스타그램 주소",
+  youtube: "유튜브 주소",
+  github: "깃허브 주소"
+}</pre>
+    <b>이메일</b>
+    <pre>contact: { email: "eunyumade01@gmail.com" }</pre>
+  </div>
+  <p style="margin-top:30px"><a class="btn primary" href="/">홈페이지로 돌아가기</a></p>
+</div></main>
+</body></html>

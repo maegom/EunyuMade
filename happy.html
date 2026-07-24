@@ -10,12 +10,12 @@
 <body>
 <header class="topbar">
   <div class="container nav">
-    <a href="index.html" class="brand"><img data-logo alt="은유제작소"></a>
+    <a href="/" class="brand"><img data-logo alt="은유제작소"></a>
     <nav class="nav-links">
-      <a href="index.html">HOME</a>
-      <a href="#story">STORY</a>
-      <a href="#experience">EXPERIENCE</a>
-      <a href="#web-play">WEB PLAY</a>
+      <a href="/">HOME</a>
+      <a href="#touch">TOUCH</a>
+      <a href="#play">PLAY</a>
+      <a href="#feel">FEEL</a>
     </nav>
     <button class="menu-btn" aria-label="메뉴 열기">☰</button>
   </div>
@@ -30,75 +30,125 @@
         <h2>함께라서 즐거운 순간들</h2>
         <p class="section-copy">사람과 반려동물이 함께하면서 생기는 평범하고 즐거운 순간들을 로봇, 게임, 화면, 소리와 촉감으로 표현합니다.</p>
         <div class="hero-actions">
-          <a class="btn primary" href="#experience">경험 살펴보기</a>
-          <a class="btn soft" href="#web-play">웹에서 잠깐 놀기</a>
+          <a class="btn primary" href="#touch">직접 경험해보기</a>
         </div>
       </div>
       <img data-img="happyMain" alt="HAPPY 프로젝트">
     </div>
   </section>
 
-  <section class="section" id="story">
+  <section class="section">
     <div class="container">
       <div class="eyebrow">WHY HAPPY?</div>
       <h2 class="section-title">별일 없는 하루가<br>그래서 더 좋은 하루였습니다.</h2>
-      <p class="section-copy">HAPPY는 실제 반려견 ‘해피’와 함께했던 일상에서 시작했습니다. 손을 내밀고, 쓰다듬고, 산책하고, 간식을 주고, 같이 쉬었던 작은 순간들. 우리는 그 평범한 교감과 즐거움을 기술로 다시 표현해보고 싶었습니다.</p>
+      <p class="section-copy">HAPPY는 실제 반려견 ‘해피’와 함께했던 일상에서 시작했습니다. 손을 내밀고, 쓰다듬고, 산책하고, 간식을 주고, 같이 쉬었던 작은 순간들. 그 평범한 교감과 즐거움을 기술과 놀이로 표현해봅니다.</p>
     </div>
   </section>
 
-  <section class="section" id="experience" style="background:var(--bg)">
-    <div class="container">
-      <div class="eyebrow">EXPERIENCE</div>
-      <h2 class="section-title">해피를 만나고,<br>놀고, 함께 느껴봅니다.</h2>
-      <div class="experience-grid">
-        <article class="experience"><span class="eyebrow">TOUCH</span><strong>HELLO, HAPPY!</strong><p>몸 옆에 붙은 팔이 위아래로 회전하며 손을 내밀고, 화면 속 표정과 움직임으로 반응하는 고정형 로봇입니다.</p></article>
-        <article class="experience"><span class="eyebrow">PLAY</span><strong>POCKET HAPPY</strong><p>공 던지기, 간식 주기, 피하기 등 자이로·버튼·터치·진동으로 즐기는 작은 디지털 펫입니다.</p></article>
-        <article class="experience"><span class="eyebrow">FEEL</span><strong>A DAY WITH HAPPY</strong><p>모니터 위 카메라와 작은 진동 컨트롤러를 이용해 화면 속 해피와 쓰다듬고 놀며 하루를 보내는 인터랙티브 경험입니다.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section web-playground" id="web-play">
-    <div class="container play-wrap">
+  <!-- TOUCH -->
+  <section class="interactive-section" id="touch">
+    <div class="container interactive-layout">
       <div>
-        <div class="eyebrow">MINI WEB EXPERIENCE</div>
-        <h2 class="section-title">웹에서도<br>해피와 잠깐 놀아보세요.</h2>
-        <p class="section-copy">실제 전시의 축소판입니다. 마우스를 해피에게 가까이 가져가 쓰다듬거나, 공을 옮겨보고, 아래 버튼으로 작은 행동을 해보세요.</p>
-        <div class="play-buttons">
-          <button data-action="pet">쓰다듬기</button>
-          <button data-action="snack">간식 주기</button>
-          <button data-action="walk">산책 가기</button>
+        <div class="eyebrow">TOUCH</div>
+        <h2 class="section-title">HELLO,<br>HAPPY!</h2>
+        <p class="section-copy">전시장에서는 몸 옆에 붙은 팔이 위아래로 회전하며 손을 내밀고, 얼굴 디스플레이가 표정으로 반응하는 고정형 로봇입니다. 웹에서는 손 내밀기와 쓰다듬기 반응을 간단히 체험할 수 있습니다.</p>
+        <div class="control-row">
+          <button id="robotHandBtn">손 내밀기 🐾</button>
+          <button id="robotPetBtn">쓰다듬기</button>
         </div>
-        <div class="play-status" id="playStatus">마우스로 해피에게 손을 가져가 보세요.</div>
+        <div class="interaction-status" id="robotStatus">해피에게 인사해보세요.</div>
       </div>
-
-      <div class="play-stage" id="playStage">
-        <div class="cloud c1"></div><div class="cloud c2"></div><div class="tree"></div>
-        <div class="dog" id="webDog">
-          <div class="tail"></div>
-          <div class="dog-body"></div>
-          <div class="dog-head">
-            <div class="ear left"></div><div class="ear right"></div>
-            <div class="eye left"></div><div class="eye right"></div>
-            <div class="nose"></div><div class="mouth"></div>
+      <div class="interactive-panel">
+        <div class="robot-stage">
+          <div class="web-robot" id="webRobot">
+            <div class="robot-body"></div>
+            <div class="robot-arm"></div>
+            <div class="robot-head">
+              <div class="robot-ear left"></div><div class="robot-ear right"></div>
+              <div class="robot-screen"><span class="face" id="robotFace">•ᴗ•</span></div>
+            </div>
+            <div class="pet-zone" id="petZone" title="여기를 클릭해서 쓰다듬어보세요"></div>
           </div>
-          <div class="paw p1"></div><div class="paw p2"></div>
         </div>
-        <div class="ball" id="ball" title="공을 드래그해 보세요"></div>
-        <div class="hand-pointer" id="handPointer">✋</div>
+        <div class="interaction-help">로봇의 머리를 직접 클릭해도 쓰다듬기 반응이 나옵니다.</div>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="eyebrow">MAKING</div>
-      <h2 class="section-title">아이디어에서<br>실제 경험까지.</h2>
-      <p class="section-copy">ESP32 기반 제어, 거리·터치 센서, 서보모터, LCD 캐릭터 애니메이션, 자이로와 진동, 카메라 기반 인터랙션, 3D 프린팅 외형을 하나의 경험으로 연결합니다.</p>
-      <div class="image-guide">
-        <b>HAPPY 대표 이미지 교체:</b> <code>assets/images/happy-project-main.png</code><br>
-        외부 이미지 URL도 가능합니다. <code>site-config.js</code>에서 <code>happyMain</code> 값을 수정하세요.
+  <!-- PLAY -->
+  <section class="interactive-section" id="play" style="background:var(--bg)">
+    <div class="container interactive-layout">
+      <div>
+        <div class="eyebrow">PLAY</div>
+        <h2 class="section-title">POCKET<br>HAPPY</h2>
+        <p class="section-copy">포켓형 디지털 펫에서는 공 던지기, 간식 주기, 피하기 같은 짧은 미니게임을 즐깁니다. 웹 버전에서는 좌우로 움직여 떨어지는 간식을 받아보세요.</p>
+        <div class="control-row">
+          <button id="gameStartBtn">게임 시작</button>
+          <button id="moveLeftBtn">← 왼쪽</button>
+          <button id="moveRightBtn">오른쪽 →</button>
+        </div>
+        <div class="interaction-status" id="gameStatus">게임 시작을 눌러주세요. 키보드 ← → 도 사용할 수 있어요.</div>
       </div>
+
+      <div class="interactive-panel">
+        <div class="pocket-shell">
+          <div class="pocket-screen" id="pocketScreen">
+            <div class="game-hud"><span>POCKET HAPPY</span><span id="gameScore">SCORE 0</span></div>
+            <div class="treat" id="treat">🦴</div>
+            <div class="catch-dog" id="catchDog">🐶</div>
+          </div>
+          <div class="pocket-controls">
+            <div class="dpad">
+              <button class="square-btn" id="deviceLeftBtn">◀</button>
+              <button class="square-btn" id="deviceRightBtn">▶</button>
+            </div>
+            <button class="round-btn" id="deviceStartBtn">A</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEEL -->
+  <section class="interactive-section" id="feel">
+    <div class="container interactive-layout">
+      <div>
+        <div class="eyebrow">FEEL</div>
+        <h2 class="section-title">A DAY<br>WITH HAPPY</h2>
+        <p class="section-copy">실제 전시에서는 모니터 위 카메라와 손에 쥐는 작은 진동 컨트롤러를 이용합니다. 웹에서는 카메라를 선택적으로 켜고, 화면 속 해피를 쓰다듬거나 공놀이·산책을 선택하며 짧은 하루를 경험합니다.</p>
+        <div class="control-row">
+          <button id="cameraBtn">카메라 켜기</button>
+          <button id="feelPetBtn">쓰다듬기</button>
+          <button id="feelBallBtn">공 던지기</button>
+          <button id="feelWalkBtn">산책하기</button>
+        </div>
+        <div class="interaction-status" id="feelStatus">해피와 무엇을 해볼까요?</div>
+        <div class="interaction-help">카메라 영상은 브라우저 안에서만 표시하며 서버로 업로드하지 않습니다. 진동은 지원되는 모바일 기기에서만 동작합니다.</div>
+      </div>
+
+      <div class="interactive-panel">
+        <div class="feel-desk">
+          <div class="monitor">
+            <div class="webcam-dot">● CAMERA</div>
+            <div class="monitor-screen">
+              <div class="park-path"></div>
+              <div class="vibe-indicator" id="vibeIndicator">VIBRATION READY</div>
+              <div class="camera-preview" id="cameraPreview"><video id="cameraVideo" autoplay muted playsinline></video></div>
+              <div class="feel-dog" id="feelDog">🐶</div>
+              <div class="feel-hand" id="feelHand">✋</div>
+            </div>
+          </div>
+          <div class="monitor-stand"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--sage-soft)">
+    <div class="container">
+      <div class="eyebrow">HAPPY AT MAKER FAIRE</div>
+      <h2 class="section-title">웹의 작은 체험을<br>실제 공간으로 확장합니다.</h2>
+      <p class="section-copy">웹에서는 화면과 클릭으로 간단히 맛볼 수 있지만, 실제 전시에서는 로봇의 움직임, 포켓 게임기의 센서와 진동, 카메라와 진동 컨트롤러를 이용해 더 직접적인 경험으로 연결합니다.</p>
     </div>
   </section>
 </main>
@@ -106,7 +156,13 @@
 <footer>
   <div class="container footer-grid">
     <div><div class="footer-brand">은유제작소 · EUNYU MADE</div><div class="small">Made from thoughts.</div></div>
-    <div class="footer-links"><a href="index.html">HOME</a><a data-link="instagram">Instagram</a><a data-link="youtube">YouTube</a></div>
+    <div class="footer-links">
+      <a href="/">HOME</a>
+      <a data-link="blog" target="_blank" rel="noopener">Blog</a>
+      <a data-link="instagram" target="_blank" rel="noopener">Instagram</a>
+      <a data-link="youtube" target="_blank" rel="noopener">YouTube</a>
+      <button data-copy-email data-label="Email 복사"></button>
+    </div>
   </div>
 </footer>
 

@@ -1,94 +1,125 @@
-# 은유제작소 EUNYU MADE Website
+# 은유제작소 EUNYU MADE Website v2
 
-정적 HTML/CSS/JavaScript로 만든 웹사이트입니다.  
-Vercel, GitHub Pages, Netlify 등에 그대로 배포할 수 있습니다.
+정적 HTML/CSS/JavaScript 기반 사이트입니다.
 
-## 파일 구조
+## 1. `/happy` 주소 사용
 
-- `index.html` : 메인 홈페이지
-- `happy.html` : HAPPY 프로젝트 상세 + 웹 미니 인터랙션
-- `image-guide.html` : 이미지/링크 교체 가이드
-- `site-config.js` : **이미지 경로, SNS 링크, 로고 경로를 한 곳에서 관리**
-- `styles.css` : 전체 디자인
-- `script.js` : 공통 메뉴/설정 적용
-- `happy.js` : HAPPY 웹 인터랙션
-- `assets/logo/eunyu-logo.svg` : 임시 로고
-- `assets/images/happy-project-main.png` : 현재 첨부한 HAPPY 이미지
+루트의 `vercel.json`에 아래 설정이 포함되어 있습니다.
 
-## 가장 먼저 수정할 곳
-
-### 1. 로고 교체
-원하는 로고 파일을 `assets/logo/` 폴더에 넣고  
-`site-config.js`의 아래 경로를 변경합니다.
-
-```js
-logo: "assets/logo/내로고.png"
+```json
+{
+  "cleanUrls": true,
+  "trailingSlash": false
+}
 ```
 
-또는 기존 `eunyu-logo.svg` 파일을 같은 이름으로 덮어써도 됩니다.
+Vercel 배포 후:
 
-### 2. HAPPY 대표 이미지
-현재 첨부 이미지를 기본값으로 넣어두었습니다.
+- `https://www.eunyumade.com/happy.html`
+- → `https://www.eunyumade.com/happy`
+
+형태의 깨끗한 URL을 사용할 수 있습니다.
+
+사이트 내부 링크도 `/happy`로 설정되어 있습니다.
+
+## 2. PNG 이미지
+
+SVG 이미지 자산을 제거했습니다.
+
+- 로고: `assets/logo/eunyu-logo.png`
+- HAPPY 이미지: `assets/images/happy-project-main.png`
+- 프로젝트 자리: `assets/images/project-placeholder.png`
+- 실험 이미지: `assets/images/experiment-01.png`
+- 실험 이미지: `assets/images/experiment-02.png`
+
+PNG 파일을 같은 파일명으로 덮어써도 되고,
+`site-config.js`에서 경로를 변경해도 됩니다.
+
+## 3. 이미지 / 외부 링크 수정
+
+`site-config.js`:
 
 ```js
-happyMain: "assets/images/happy-project-main.png"
+links: {
+  happy: "/happy",
+  blog: "#",
+  instagram: "#",
+  youtube: "#",
+  github: "#"
+}
 ```
 
-다른 이미지를 넣고 경로만 바꾸면 메인과 HAPPY 상세 페이지에 동시에 반영됩니다.
-
-외부 이미지 주소도 가능합니다.
+예:
 
 ```js
-happyMain: "https://example.com/happy.jpg"
+instagram: "https://instagram.com/eunyumade",
+youtube: "https://youtube.com/@eunyumade",
+github: "https://github.com/계정명",
+blog: "https://blog.naver.com/..."
 ```
 
-### 3. Instagram / YouTube / GitHub
-`site-config.js`의 `links`를 수정하세요.
+## 4. 이메일
+
+현재 이메일:
+
+`eunyumade01@gmail.com`
+
+Footer의 `Email 복사`를 누르면 클립보드에 복사됩니다.
+
+브라우저에서 클립보드 권한을 사용할 수 없는 경우
+복사할 수 있는 창이 대신 뜹니다.
+
+## 5. "다음에는 무엇을 만들어볼까요?"
+
+별도의 데이터베이스 서버를 사용하지 않습니다.
+
+입력 후 버튼을 누르면:
+
+1. 사용자의 기본 이메일 앱을 엽니다.
+2. 받는 사람은 `eunyumade01@gmail.com`
+3. 입력한 아이디어를 이메일 본문에 자동으로 채웁니다.
+4. 사용자가 직접 `전송`해야 실제로 은유제작소에 전달됩니다.
+
+사이트나 서버에는 입력 내용이 자동 저장되지 않습니다.
+
+나중에 Google Forms / Formspree / Supabase / 자체 API를 연결하면
+사이트에서 바로 수집하도록 변경할 수 있습니다.
+
+## 6. HAPPY 웹 인터랙션
+
+`/happy` 페이지에 세 개의 별도 체험이 있습니다.
+
+### TOUCH — HELLO, HAPPY!
+- 웹 로봇이 팔을 위로 회전해 손 내밀기
+- 머리를 클릭하거나 쓰다듬기 버튼을 누르면 표정 변화
+
+### PLAY — POCKET HAPPY
+- 간식 받기 미니게임
+- 화면/버튼 또는 키보드 ← → 조작
+- 점수 표시
+
+### FEEL — A DAY WITH HAPPY
+- 선택적으로 웹캠 켜기
+- 쓰다듬기 / 공 던지기 / 산책
+- 모바일 기기에서 지원될 경우 Vibration API 진동
+- 웹캠 영상은 브라우저 화면에만 표시하며 업로드하지 않음
+
+## 7. 블로그
+
+메인 페이지의 Making Log를 제거하고 Blog CTA로 변경했습니다.
+
+`site-config.js`:
 
 ```js
-instagram: "https://instagram.com/...",
-youtube: "https://youtube.com/...",
-github: "https://github.com/...",
-email: "mailto:..."
+blog: "블로그 주소"
 ```
 
-## HAPPY 웹 인터랙션
+## 8. Vercel 배포
 
-`happy.html`의 "웹에서도 해피와 잠깐 놀아보세요" 영역에 간단한 인터랙션이 있습니다.
-
-- 마우스를 해피에게 가까이 이동 → 해피가 반응
-- 공 드래그 → 공놀이
-- 쓰다듬기 / 간식 / 산책 버튼
-
-현재는 외부 라이브러리 없이 CSS + JS로 만든 가벼운 프로토타입입니다.
-나중에 실제 캐릭터 이미지, Canvas, Phaser, Three.js 등으로 교체할 수 있습니다.
-
-## Vercel 배포
-
-1. 이 폴더 전체를 GitHub 저장소에 업로드
+1. 프로젝트 폴더를 GitHub 저장소에 업로드
 2. Vercel → Add New Project
-3. 해당 GitHub 저장소 선택
-4. Framework Preset: `Other`
-5. Build Command: 비워두기
-6. Output Directory: 비워두기
-7. Deploy
+3. 저장소 선택
+4. Framework Preset: Other
+5. 별도 Build Command 없이 배포
 
-## 로컬 실행
-
-파일을 더블클릭해도 기본 화면은 열리지만, 브라우저 보안정책 때문에 로컬 서버 사용을 권장합니다.
-
-Python:
-```bash
-python -m http.server 8000
-```
-
-브라우저에서:
-`http://localhost:8000`
-
-## 디자인 컨셉
-
-- 베이지 / 크림 기반
-- 브라운 텍스트
-- 따뜻한 오렌지 포인트
-- HAPPY 프로젝트는 밝은 자연색과 섞어 사용
-- 메인 Hero는 정적이며, 인터랙션은 프로젝트 안에서만 사용
+`vercel.json`은 프로젝트 루트에 그대로 두세요.
