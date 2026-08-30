@@ -1,0 +1,41 @@
+{
+  "name": "PocketMung / HAPPY PLAY enclosure",
+  "units": "mm",
+  "parameters": {
+    "body_width": 78.0,
+    "body_depth": 42.0,
+    "body_height": 96.0,
+    "body_bottom_z": 4.0,
+    "body_corner_radius": 14.5,
+    "wall_thickness": 2.4,
+    "shell_gap": 0.55,
+    "ear_base_x": 25.0,
+    "ear_base_y": -0.5,
+    "ear_base_z": 91.0,
+    "ear_height": 31.5,
+    "ear_base_rx": 10.2,
+    "ear_base_ry": 7.2,
+    "tail_base_z": 22.5,
+    "tail_height": 26.0,
+    "display_width": 44.0,
+    "display_height": 55.5,
+    "display_center_z": 57.0,
+    "bezel_width": 51.0,
+    "bezel_height": 63.0,
+    "usb_center_z": 38.0,
+    "button_center_z": 64.0
+  },
+  "outputs": {
+    "blend": "PocketMung_HappyPlay_Detailed.blend",
+    "reference_glb": "PocketMung_reference_assembly.glb",
+    "production_glb": "PocketMung_production_assembly.glb",
+    "stl_directory": "stl/"
+  },
+  "collections": {
+    "01_REFERENCE_ASSEMBLY": "Clean shell matching the supplied multi-view concept",
+    "02_PRODUCTION_VARIANT": "Display/USB/button/speaker implementation",
+    "03_INTERNALS": "Editable placeholders and screw bosses",
+    "04_DIMENSIONS": "Hidden measurement guides"
+  },
+  "manufacturing_note": "Concept-derived dimensions; verify all electronics before final print."
+}
