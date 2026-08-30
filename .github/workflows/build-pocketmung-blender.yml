@@ -30,7 +30,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
-            blender imagemagick zip xvfb \
+            blender imagemagick zip xvfb python3-numpy \
             libegl1 libegl-mesa0 libgl1 libglx-mesa0 libgles2 mesa-utils
           blender --version
           glxinfo -B || true
