@@ -35,6 +35,11 @@ jobs:
           blender --version
           glxinfo -B || true
 
+      - name: Apply rounded-ear concept refinement
+        run: |
+          python3 tools/pocketmung/refine_pocketmung_ears.py
+          python3 -m py_compile tools/pocketmung/build_pocketmung.py
+
       - name: Generate Blender model, renders and print exports
         run: |
           rm -rf dist/pocketmung dist/PocketMung_HappyPlay_Blender_Package.zip
