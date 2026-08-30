@@ -16,6 +16,9 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 35
+    env:
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      MESA_LOADER_DRIVER_OVERRIDE: "llvmpipe"
 
     steps:
       - name: Check out branch
@@ -26,14 +29,17 @@ jobs:
       - name: Install Blender and packaging tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends blender imagemagick zip
+          sudo apt-get install -y --no-install-recommends \
+            blender imagemagick zip xvfb \
+            libegl1 libegl-mesa0 libgl1 libglx-mesa0 libgles2 mesa-utils
           blender --version
+          glxinfo -B || true
 
       - name: Generate Blender model, renders and print exports
         run: |
           rm -rf dist/pocketmung dist/PocketMung_HappyPlay_Blender_Package.zip
           mkdir -p dist/pocketmung
-          blender -b \
+          xvfb-run -a -s "-screen 0 1920x1080x24" blender -b \
             --python tools/pocketmung/build_pocketmung.py \
             -- --output-dir "$GITHUB_WORKSPACE/dist/pocketmung"
 
@@ -53,7 +59,8 @@ jobs:
       - name: Validate generated blend file
         run: |
           test -s dist/pocketmung/PocketMung_HappyPlay_Detailed.blend
-          blender -b dist/pocketmung/PocketMung_HappyPlay_Detailed.blend \
+          xvfb-run -a -s "-screen 0 1280x720x24" blender -b \
+            dist/pocketmung/PocketMung_HappyPlay_Detailed.blend \
             --python-expr "import bpy; assert 'PocketMung_MASTER' in bpy.data.objects; assert 'Ear_Left_Orange' in bpy.data.objects; assert 'Tail_Teardrop' in bpy.data.objects; print('VALID_BLEND_OBJECTS', len(bpy.data.objects))"
 
       - name: Package outputs and write checksums
