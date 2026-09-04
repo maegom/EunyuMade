@@ -17,7 +17,7 @@ window.EUNYU_CONFIG = {
   links: {
     happy: "/happy",
     blog: "#",
-    instagram: "#",
+    instagram: "https://www.instagram.com/eunyumade",
     youtube: "#",
     github: "#"
   },
