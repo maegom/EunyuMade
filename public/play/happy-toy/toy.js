@@ -1,10 +1,8 @@
-
+// HAPPY 웹 장난감 (2026.07). TOUCH · PLAY · FEEL 세 체험.
 (function(){
   const $ = s => document.querySelector(s);
 
-  // --------------------------------------------------------------
   // 1) TOUCH — HELLO, HAPPY!
-  // --------------------------------------------------------------
   const robot = $("#webRobot");
   const face = $("#robotFace");
   const robotStatus = $("#robotStatus");
@@ -37,10 +35,7 @@
   $("#robotPetBtn")?.addEventListener("click", robotPet);
   $("#petZone")?.addEventListener("click", robotPet);
 
-  // --------------------------------------------------------------
   // 2) PLAY — POCKET HAPPY
-  // --------------------------------------------------------------
-  const screen = $("#pocketScreen");
   const dog = $("#catchDog");
   const treat = $("#treat");
   const scoreEl = $("#gameScore");
@@ -57,7 +52,6 @@
     dogX = Math.max(10, Math.min(90, v));
     if(dog) dog.style.left = dogX + "%";
   }
-
   function moveDog(delta){ setDogX(dogX + delta); }
 
   function resetTreat(){
@@ -81,7 +75,6 @@
     if(!gameRunning) return;
     treatY += .42;
     if(treat) treat.style.top = treatY + "%";
-
     if(treatY > 76 && treatY < 93 && Math.abs(treatX-dogX) < 12){
       score += 1;
       if(scoreEl) scoreEl.textContent = "SCORE " + score;
@@ -116,9 +109,7 @@
     if(e.key === "ArrowRight") moveDog(7);
   });
 
-  // --------------------------------------------------------------
   // 3) FEEL — A DAY WITH HAPPY
-  // --------------------------------------------------------------
   const cameraBtn = $("#cameraBtn");
   const cameraPreview = $("#cameraPreview");
   const cameraVideo = $("#cameraVideo");

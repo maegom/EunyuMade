@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import StatusChip from '../../components/StatusChip.astro';
+import { getCollection, render } from 'astro:content';
+import { kindLabel } from '../../data/site';
+
+export async function getStaticPaths() {
+  const all = await getCollection('series');
+  return all.map((entry) => ({ params: { series: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const members = (await getCollection('projects', ({ data }) => data.series === entry.id)).sort((a, b) => a.data.order - b.data.order);
+const active = members.filter((m) => m.data.status !== 'idea');
+const ideas = members.filter((m) => m.data.status === 'idea');
+const threads = members.flatMap((m) =>
+  m.data.relations.map((r) => ({ from: m.data.title, to: members.find((x) => x.id === r.slug)?.data.title ?? r.slug, note: r.note }))
+);
+---
+<Base title={`${entry.data.title} 시리즈`} description={entry.data.description} ogImage={entry.data.cover}>
+  <main class="container page">
+    <div class="crumb"><a href="/">만든 것</a><span>›</span><span>{entry.data.title} 시리즈</span></div>
+    <div class="hub-hero">
+      <div>
+        <h1 class="page-title">{entry.data.title}</h1>
+        <p class="page-sub">{entry.data.tagline}</p>
+        <p class="muted" style="margin-top:14px">{entry.data.description}</p>
+        {entry.data.toy_url && (
+          <p style="margin-top:18px"><a class="btn primary" href={entry.data.toy_url}>{entry.data.toy_label ?? '만나보기'} 실행하기</a></p>
+        )}
+      </div>
+      {entry.data.cover && <div class="art"><img src={entry.data.cover} alt={`${entry.data.title} 대표 이미지`} /></div>}
+    </div>
+
+    <h2 class="sec-title">구성원</h2>
+    <div class="members">
+      {members.map((m) => {
+        const dim = m.data.status === 'idea';
+        const Tag = dim ? 'div' : 'a';
+        return (
+          <Tag class:list={['member', { dim }]} href={dim ? undefined : `/${entry.id}/${m.id}`}>
+            {m.data.verb && <span class="member-verb">{m.data.verb}</span>}
+            <span class="member-name">{m.data.title}</span>
+            <span class="member-line">{m.data.one_line}</span>
+            <span class="member-foot"><span>{kindLabel[m.data.kind]}{m.data.year ? ` · ${m.data.year}` : ''}</span><StatusChip status={m.data.status} /></span>
+          </Tag>
+        );
+      })}
+    </div>
+
+    <div class="two">
+      <div>
+        <h2 class="sec-title">이야기</h2>
+        <div class="prose"><Content /></div>
+        {threads.length > 0 && (
+          <>
+            <h2 class="sec-title">이어짐</h2>
+            <ul class="thread">
+              {threads.map((t) => <li><b>{t.from} → {t.to}</b><span class="muted">{t.note}</span></li>)}
+            </ul>
+          </>
+        )}
+      </div>
+      <div>
+        {entry.data.common.length > 0 && (
+          <>
+            <h2 class="sec-title">공통 요소</h2>
+            <ul class="common">{entry.data.common.map((c) => <li>{c}</li>)}</ul>
+          </>
+        )}
+        {ideas.length > 0 && (
+          <>
+            <h2 class="sec-title">다음 구성원</h2>
+            <ul class="common">
+              {ideas.map((m) => <li><b>{m.data.title}</b> · {m.data.verb} <span class="muted">— {m.data.one_line}</span></li>)}
+            </ul>
+          </>
+        )}
+        {active.length > 0 && (
+          <>
+            <h2 class="sec-title">지금 볼 수 있는 것</h2>
+            <ul class="common">
+              {active.map((m) => <li><a href={`/${entry.id}/${m.id}`}><b>{m.data.title}</b></a> <span class="muted">— {m.data.one_line}</span></li>)}
+            </ul>
+          </>
+        )}
+      </div>
+    </div>
+  </main>
+</Base>

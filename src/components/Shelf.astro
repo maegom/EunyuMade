@@ -1,0 +1,13 @@
+---
+import Tile, { type TileItem } from './Tile.astro';
+interface Props { title: string; items: TileItem[] }
+const { title, items } = Astro.props;
+---
+{items.length > 0 && (
+  <section class="shelf" aria-label={title}>
+    <h2 class="shelf-title">{title}</h2>
+    <div class="shelf-grid">
+      {items.map((item) => <Tile {...item} />)}
+    </div>
+  </section>
+)}

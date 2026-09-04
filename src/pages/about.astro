@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, withSource } from '../data/site';
+---
+<Base title="은유제작소" description="은유는 어떤 생각이나 의미를 다른 모습에 빗대어 표현하는 것. 은유제작소는 생각을 다른 형태의 경험으로 번역합니다.">
+  <main class="container page">
+    <div class="label" style="margin-bottom:6px">About</div>
+    <h1 class="page-title">보이지 않는 것을<br />경험할 수 있는 것으로.</h1>
+    <p class="page-sub">은유(隱喩)는 어떤 생각이나 의미를 다른 모습에 빗대어 표현하는 말입니다. 은유제작소는 그 뜻 그대로, 생각을 다른 형태의 경험으로 옮깁니다.</p>
+
+    <div class="two">
+      <div>
+        <div class="prose">
+          <p>눈에 보이지 않는 상상과 생각, 감정과 이야기를 장난감, 로봇, 게임, 웹, 3D 프린팅, 음악과 영상으로 옮겨 실제로 만지고 보고 들을 수 있게 만듭니다. 분야를 하나로 정하기보다 아이디어를 가장 잘 전달할 수 있는 매체를 찾아 직접 만들고 실험합니다.</p>
+          <p>완성된 결과만큼 스케치하고, 만들고, 실패하고, 다시 고치는 과정을 중요하게 생각합니다. 그래서 이 사이트에는 완성된 것뿐 아니라 만드는 중인 것과 실험도 함께 올라갑니다.</p>
+        </div>
+
+        <h2 class="sec-title">만드는 방법</h2>
+        <div class="way">
+          <div><b>THINK</b><span>작은 질문과 상상에서 시작합니다.</span></div>
+          <div><b>MAKE</b><span>직접 모델링하고, 출력하고, 코딩하고, 조립합니다.</span></div>
+          <div><b>EXPERIENCE</b><span>사람이 직접 만지고 느낄 수 있는 경험으로 완성합니다.</span></div>
+        </div>
+
+        <h2 class="sec-title">이 페이지의 다음 모습</h2>
+        <div class="notice">
+          <b>이 페이지는 곧 체험형으로 바뀝니다.</b> 은유제작소를 설명하는 대신, 형태 없는 것 하나를 넣으면 작은 형태로 만들어 주는 장치를 여기에 둘 예정입니다. 콘셉트를 정하는 중입니다.
+        </div>
+      </div>
+
+      <div>
+        <h2 class="sec-title">사실 정보</h2>
+        <dl class="facts">
+          <div><dt>이름</dt><dd>은유제작소 · EUNYU MADE</dd></div>
+          <div><dt>하는 일</dt><dd>인터랙티브 캐릭터, 포켓형 디바이스, 제스처 인터랙션, 웹 콘텐츠, 피지컬 컴퓨팅, 3D 프린팅, 전시</dd></div>
+          <div><dt>메일</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+          {site.links.instagram && <div><dt>인스타그램</dt><dd><a href={withSource(site.links.instagram, 'site')} target="_blank" rel="noopener">@eunyumade ↗</a></dd></div>}
+          <div><dt>명함</dt><dd><a href="/card">/card</a></dd></div>
+        </dl>
+      </div>
+    </div>
+  </main>
+</Base>

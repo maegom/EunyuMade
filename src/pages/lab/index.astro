@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { kindLabel } from '../../data/site';
+
+const items = (await getCollection('lab')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = (d: Date) => `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}`;
+---
+<Base title="LAB" description="완성 프로젝트가 되기 전의 작은 실험들. 실행 가능한 것은 그 자리에서 실행됩니다.">
+  <main class="container page">
+    <h1 class="page-title">LAB</h1>
+    <p class="page-sub">완성되기 전의 작은 실험들. 파란 점이 있으면 그 자리에서 실행됩니다.</p>
+    <div class="lab-grid" style="margin-top:28px">
+      {items.map((l, i) => (
+        <a class="lab-card" href={`/lab/${l.id}`}>
+          <div class="lab-media">{l.data.cover && <img src={l.data.cover} alt="" loading="lazy" />}</div>
+          <div class="lab-body">
+            <div class="lab-head"><span>№ {String(items.length - i).padStart(3, '0')} · {fmt(l.data.date)}</span><span>{kindLabel[l.data.kind]}</span></div>
+            <div class="lab-title">{l.data.play_url && <span class="live" title="실행 가능"></span>}{l.data.title}</div>
+            <div class="lab-sum">{l.data.summary}</div>
+            {l.data.tags.length > 0 && <div class="tags">{l.data.tags.map((t) => <span class="tag">{t}</span>)}</div>}
+          </div>
+        </a>
+      ))}
+    </div>
+  </main>
+</Base>

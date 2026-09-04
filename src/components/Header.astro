@@ -1,0 +1,23 @@
+---
+import { site } from '../data/site';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const nav = [
+  { href: '/', label: '만든 것' },
+  { href: '/happy', label: 'HAPPY' },
+  { href: '/lab', label: 'LAB' },
+  { href: '/about', label: '은유제작소' },
+];
+const isActive = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(href + '/'));
+---
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand" aria-label="은유제작소 홈">
+      <img src={site.logo} alt="은유제작소" width="132" height="64" />
+    </a>
+    <nav class="nav" aria-label="주요 메뉴">
+      {nav.map((n) => (
+        <a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>

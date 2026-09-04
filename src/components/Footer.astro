@@ -1,0 +1,74 @@
+---
+import { site, withSource } from '../data/site';
+const year = new Date().getFullYear();
+const ext = [
+  { key: 'instagram', label: 'Instagram' },
+  { key: 'youtube', label: 'YouTube' },
+  { key: 'blog', label: 'Blog' },
+  { key: 'github', label: 'GitHub' },
+  { key: 'store', label: '스토어' },
+  { key: 'support', label: '후원' },
+].filter((l) => (site.links as Record<string, string>)[l.key]);
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">은유제작소 · EUNYU MADE</div>
+        <p class="footer-tag">{site.tagline}</p>
+        <div class="footer-links">
+          {ext.map((l) => (
+            <a href={withSource((site.links as Record<string, string>)[l.key], 'site')} target="_blank" rel="noopener">{l.label} ↗</a>
+          ))}
+          <a href="/card">명함</a>
+          <button type="button" data-copy-email data-email={site.email}>메일 주소 복사</button>
+        </div>
+      </div>
+      <form class="memo" id="ideaForm" data-email={site.email}>
+        <label for="ideaInput">다음에는 무엇을 만들어볼까요?</label>
+        <input id="ideaInput" name="idea" placeholder="예: 기분에 따라 빛이 바뀌는 작은 로봇" autocomplete="off" />
+        <button class="btn small" type="submit">메일로 보내기</button>
+        <div class="msg" id="ideaMessage" aria-live="polite"></div>
+        <p class="note">사이트에는 저장되지 않습니다. 메일 앱이 열리고, 보내기를 눌러야 은유제작소에 전달됩니다.</p>
+      </form>
+    </div>
+    <div class="copyright"><span>© {year} EUNYU MADE</span><span>Made from thoughts.</span></div>
+  </div>
+</footer>
+
+<script>
+  // 메일 주소 복사
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-email]').forEach((btn) => {
+    const email = btn.dataset.email || '';
+    btn.addEventListener('click', async () => {
+      const old = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(email);
+        btn.textContent = '복사됨 ✓';
+        setTimeout(() => (btn.textContent = old), 1600);
+      } catch {
+        window.prompt('이메일 주소를 복사하세요.', email);
+      }
+    });
+  });
+
+  // 아이디어 메모: 서버 없이 메일 앱으로
+  const form = document.getElementById('ideaForm') as HTMLFormElement | null;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('ideaInput') as HTMLInputElement | null;
+      const msg = document.getElementById('ideaMessage');
+      const value = input?.value.trim() || '';
+      if (!value) {
+        if (msg) msg.textContent = '떠오르는 생각을 한 줄만 적어주세요.';
+        return;
+      }
+      const email = form.dataset.email || '';
+      const subject = encodeURIComponent('[은유제작소] 홈페이지에서 남긴 아이디어');
+      const body = encodeURIComponent('안녕하세요, 은유제작소.\n\n이런 것을 만들어보면 재미있을 것 같아요:\n\n' + value + '\n');
+      if (msg) msg.textContent = '메일 앱을 열고 있어요. 보내기를 눌러야 전달됩니다.';
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    });
+  }
+</script>

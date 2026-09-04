@@ -1,0 +1,11 @@
+---
+import { statusLabel, type Status } from '../data/site';
+interface Props { status: Status }
+const { status } = Astro.props;
+const cls =
+  status === 'idea' ? 'chip idea'
+  : status === 'exhibited' || status === 'made' ? 'chip solid'
+  : status === 'making' || status === 'prototype' ? 'chip blue'
+  : 'chip';
+---
+<span class={cls}>{statusLabel[status]}</span>

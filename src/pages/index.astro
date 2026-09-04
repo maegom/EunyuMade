@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import Shelf from '../components/Shelf.astro';
+import type { TileItem } from '../components/Tile.astro';
+import { getCollection } from 'astro:content';
+
+// 특집 타일이 줄의 맨 앞에 오고, 그 다음은 시리즈 안 순서.
+const projects = (await getCollection('projects')).sort(
+  (a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order
+);
+const series = await getCollection('series');
+const lab = (await getCollection('lab')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const seriesTitle = (id: string) => series.find((s) => s.id === id)?.data.title ?? id;
+
+const toItem = (p: (typeof projects)[number]): TileItem => ({
+  title: p.data.title,
+  href: `/${p.data.series}/${p.id}`,
+  kind: p.data.kind,
+  status: p.data.status,
+  series: seriesTitle(p.data.series),
+  cover: p.data.cover,
+  loop: p.data.loop,
+  one_line: p.data.one_line,
+  runnable: !!p.data.play_url,
+  featured: p.data.featured,
+});
+
+// 선반의 줄: 만든 것 → 만드는 중 → 실험. 빈 줄은 표시하지 않습니다.
+const made = projects.filter((p) => ['made', 'exhibited'].includes(p.data.status)).map(toItem);
+const making = projects.filter((p) => ['prototype', 'making'].includes(p.data.status)).map(toItem);
+const aboutTile: TileItem = {
+  title: '은유제작소',
+  href: '/about',
+  kind: 'web',
+  status: 'making',
+  one_line: '설명하는 대신 체험하게 하는 페이지. 콘셉트를 정하는 중.',
+};
+const experiments: TileItem[] = [
+  ...projects.filter((p) => p.data.status === 'experiment').map(toItem),
+  ...lab.map((l) => ({
+    title: l.data.title,
+    href: `/lab/${l.id}`,
+    kind: l.data.kind,
+    status: 'experiment' as const,
+    cover: l.data.cover,
+    loop: l.data.loop,
+    one_line: l.data.summary,
+    runnable: !!l.data.play_url,
+  })),
+];
+const nowList = projects.filter((p) => ['prototype', 'making'].includes(p.data.status)).map((p) => p.data.title);
+---
+<Base>
+  <main class="container">
+    <section class="intro">
+      <h1>은유제작소가 만든 것들.</h1>
+      {nowList.length > 0 && (
+        <p class="now"><span class="now-dot" aria-hidden="true"></span>지금 만드는 중: {nowList.join(', ')}</p>
+      )}
+    </section>
+    <Shelf title="만든 것" items={made} />
+    <Shelf title="만드는 중" items={[...making, aboutTile]} />
+    <Shelf title="실험" items={experiments} />
+  </main>
+</Base>

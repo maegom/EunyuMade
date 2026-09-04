@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { kindLabel } from '../../data/site';
+
+export async function getStaticPaths() {
+  const items = await getCollection('lab');
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const fmt = (x: Date) => `${x.getFullYear()}.${String(x.getMonth() + 1).padStart(2, '0')}.${String(x.getDate()).padStart(2, '0')}`;
+---
+<Base title={d.title} description={d.summary} ogImage={d.cover}>
+  <main class="container page">
+    <div class="crumb"><a href="/lab">LAB</a><span>›</span><span>{d.title}</span></div>
+    <div class="page-head">
+      <div>
+        <div class="label" style="margin-bottom:6px">{fmt(d.date)} · {kindLabel[d.kind]}</div>
+        <h1 class="page-title">{d.title}</h1>
+        <p class="page-sub">{d.summary}</p>
+      </div>
+      {d.play_url && <a class="btn primary" href={d.play_url}>실행하기</a>}
+    </div>
+
+    {d.cover && <div class="hero-media"><img src={d.cover} alt={`${d.title} 이미지`} /></div>}
+
+    <div class="two">
+      <div class="prose"><Content /></div>
+      <div>
+        {d.tags.length > 0 && (
+          <>
+            <h2 class="sec-title">기술</h2>
+            <div class="tags">{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
+          </>
+        )}
+        {d.became && (
+          <>
+            <h2 class="sec-title">이어짐</h2>
+            <a class="rel-card" href={d.became} style="display:block"><b>이 실험에서 이어진 것</b><span>{d.became}</span></a>
+          </>
+        )}
+      </div>
+    </div>
+
+    <div class="next"><a href="/lab">← LAB</a></div>
+  </main>
+</Base>

@@ -1,0 +1,40 @@
+---
+import StatusChip from './StatusChip.astro';
+import { kindLabel, type Kind, type Status } from '../data/site';
+
+export interface TileItem {
+  title: string;
+  href: string;
+  kind: Kind;
+  status: Status;
+  series?: string;
+  cover?: string;
+  loop?: string;
+  one_line?: string;
+  runnable?: boolean;
+  featured?: boolean;
+}
+interface Props extends TileItem {}
+const { title, href, kind, status, series, cover, loop, one_line, runnable = false, featured = false } = Astro.props;
+const dim = status === 'idea';
+const Tag = dim ? 'div' : 'a';
+---
+<Tag class:list={['tile', { feat: featured, dim }]} href={dim ? undefined : href}>
+  <div class="tile-media">
+    {cover
+      ? <img src={cover} alt="" loading="lazy" width="600" height="600" />
+      : <div class="tile-type" aria-hidden="true"><span>{title}</span></div>}
+    {loop && <video src={loop} muted loop playsinline preload="none" aria-hidden="true"></video>}
+  </div>
+  <div class="tile-meta">
+    <div class="tile-top">
+      <span class="tile-labels">
+        {series && <span>{series}</span>}
+        <span>{kindLabel[kind]}</span>
+      </span>
+      <StatusChip status={status} />
+    </div>
+    <div class="tile-title">{runnable && <span class="live" title="실행 가능"></span>}{title}</div>
+    {one_line && <div class="tile-line">{one_line}</div>}
+  </div>
+</Tag>
