@@ -16,6 +16,8 @@ public/
   assets/       이미지, 로고
   play/         실행형 페이지 (예: /play/happy-toy)
   eunyumade.vcf 명함의 "연락처 저장"
+apps/
+  true-size/    별도 Vercel 프로젝트로 배포하는 실물 크기 스튜디오
 ```
 
 ## 새 프로젝트 추가
@@ -59,6 +61,8 @@ traces:
 ## 실행형 페이지
 
 브라우저에서 실행되는 것은 `public/play/<slug>/index.html`로 두고, 프로젝트의 `play_url`에 그 주소를 씁니다. 나중에 별도 저장소로 분리해도 `vercel.json`의 rewrite로 같은 주소를 유지할 수 있습니다.
+
+`apps/true-size`는 같은 GitHub 저장소를 사용하는 별도 Vercel 프로젝트입니다. Vercel의 Root Directory를 `apps/true-size`로 지정하고 `truesize.eunyumade.com`을 연결합니다.
 
 ## 로컬에서 보기
 

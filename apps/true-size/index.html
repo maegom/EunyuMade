@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1118" />
+    <meta name="description" content="모니터를 실제 자로 보정하고 이미지를 정확한 실물 크기로 확인하는 도구" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1118'/%3E%3Cpath d='M13 17h38v30H13z' fill='none' stroke='%235de4c7' stroke-width='4'/%3E%3Cpath d='M21 17v9m8-9v5m8-5v9m8-9v5' stroke='%23f5b854' stroke-width='3'/%3E%3C/svg%3E" />
+    <title>실물 크기 스튜디오</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="실물 크기 스튜디오">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M5 8.5h22v15H5z"/><path d="M10 8.5v5m5-5v3m5-3v5m5-5v3"/></svg>
+          </span>
+          <div>
+            <strong>실물 크기 스튜디오</strong>
+            <small>TRUE SIZE WORKSPACE</small>
+          </div>
+        </div>
+
+        <div class="scale-status" id="scaleStatus" aria-live="polite">
+          <span class="status-dot"></span>
+          <span id="scaleStatusText">기본 스케일 · 보정 필요</span>
+          <code id="scaleReadout">3.7795 px/mm</code>
+        </div>
+
+        <div class="top-actions">
+          <button class="ghost-button" id="toggleCalibration" type="button" aria-expanded="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M7 4v6m5-6v3m5-3v6M4 17h16"/></svg>
+            <span>스케일 보정</span>
+          </button>
+          <button class="icon-button" id="fullscreenButton" type="button" aria-label="전체 화면" title="전체 화면">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M8 21H3v-5m13 5h5v-5"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <aside class="control-panel" aria-label="도구 설정">
+          <section class="panel-section calibration-controls">
+            <div class="section-kicker"><span>01</span> MONITOR CALIBRATION</div>
+            <h1>실제 자와 화면을 맞추세요</h1>
+            <p class="section-copy">오른쪽 기준선에 실제 자를 대고, 선 길이가 선택한 값과 같아질 때까지 끝점을 드래그하세요.</p>
+
+            <div class="field-label-row">
+              <label>기준 길이</label>
+              <span>길수록 정확해요</span>
+            </div>
+            <div class="segment-control" id="targetLengthControl" role="radiogroup" aria-label="보정 기준 길이">
+              <button type="button" data-target="50" role="radio" aria-checked="false">50 mm</button>
+              <button type="button" data-target="100" role="radio" aria-checked="true" class="is-active">100 mm</button>
+              <button type="button" data-target="150" role="radio" aria-checked="false">150 mm</button>
+            </div>
+
+            <div class="micro-adjust" aria-label="보정 미세 조절">
+              <button type="button" data-adjust="-0.01" title="1% 줄이기">−1%</button>
+              <button type="button" data-adjust="-0.001" title="0.1% 줄이기">−0.1%</button>
+              <div><strong id="calibrationPercent">100.00%</strong><small>초기값 대비</small></div>
+              <button type="button" data-adjust="0.001" title="0.1% 늘리기">+0.1%</button>
+              <button type="button" data-adjust="0.01" title="1% 늘리기">+1%</button>
+            </div>
+
+            <details class="measured-correction">
+              <summary>측정값을 숫자로 입력해서 맞추기</summary>
+              <div class="correction-row">
+                <label for="measuredLength">자에서 보이는 길이</label>
+                <div class="unit-input"><input id="measuredLength" type="number" min="10" max="500" step="0.1" value="100" /><span>mm</span></div>
+              </div>
+              <button class="secondary-button full" id="applyMeasured" type="button">측정값으로 자동 보정</button>
+              <p>예: 100 mm 기준선이 실제 자에서 96 mm라면 <b>96</b>을 입력하세요.</p>
+            </details>
+
+            <div class="calibration-actions">
+              <button class="primary-button" id="saveCalibration" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                이 스케일로 확정
+              </button>
+              <button class="text-button" id="resetCalibration" type="button">초기화</button>
+            </div>
+          </section>
+
+          <section class="panel-section image-controls">
+            <div class="section-kicker"><span>02</span> IMAGE SIZE</div>
+            <div class="section-heading-row">
+              <h2>이미지 실물 크기</h2>
+              <button class="text-button" id="removeImage" type="button" hidden>지우기</button>
+            </div>
+
+            <div class="empty-image-controls" id="emptyImageControls">
+              <button class="upload-card" id="sidebarUpload" type="button">
+                <span class="upload-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="m6 16 4-4 3 3 2-2 3 3M15 9h.01"/></svg>
+                </span>
+                <strong>이미지를 불러오세요</strong>
+                <small>PNG, JPG, WebP · 파일은 외부로 전송되지 않아요</small>
+              </button>
+            </div>
+
+            <div class="loaded-image-controls" id="loadedImageControls" hidden>
+              <div class="file-chip">
+                <div class="file-preview"><img id="filePreview" alt="불러온 이미지 미리보기" /></div>
+                <div><strong id="fileName">image.png</strong><span id="fileMeta">1200 × 800 px</span></div>
+                <button class="mini-icon-button" id="replaceImage" type="button" aria-label="이미지 교체" title="이미지 교체">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7L20 14"/><path d="M20 8v6h-6"/></svg>
+                </button>
+              </div>
+
+              <div class="field-label-row">
+                <label>출력 크기</label>
+                <label class="lock-toggle"><input id="lockRatio" type="checkbox" checked /><span></span>비율 잠금</label>
+              </div>
+              <div class="two-column-fields">
+                <label class="number-field"><span>너비 W</span><div><input id="imageWidth" type="number" min="1" max="1000" step="0.1" /><em>mm</em></div></label>
+                <label class="number-field"><span>높이 H</span><div><input id="imageHeight" type="number" min="1" max="1000" step="0.1" /><em>mm</em></div></label>
+              </div>
+
+              <div class="field-label-row compact"><label>보드 위치</label><span>화살표 키로 1 mm 이동</span></div>
+              <div class="two-column-fields">
+                <label class="number-field"><span>가로 X</span><div><input id="imageX" type="number" min="0" max="600" step="0.1" /><em>mm</em></div></label>
+                <label class="number-field"><span>세로 Y</span><div><input id="imageY" type="number" min="0" max="400" step="0.1" /><em>mm</em></div></label>
+              </div>
+
+              <div class="quick-size-row">
+                <button type="button" data-width="50">50 mm</button>
+                <button type="button" data-width="100">100 mm</button>
+                <button type="button" data-width="150">150 mm</button>
+                <button type="button" id="centerImage">가운데</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel-section view-controls">
+            <div class="section-kicker"><span>03</span> VIEW</div>
+            <div class="toggle-list">
+              <label><span><b>1 mm 미세 격자</b><small>정밀 위치 확인</small></span><input id="minorGridToggle" type="checkbox" checked /><i></i></label>
+              <label><span><b>10 mm 굵은 격자</b><small>1 cm 단위 확인</small></span><input id="majorGridToggle" type="checkbox" checked /><i></i></label>
+              <label><span><b>가로·세로 줄자</b><small>보드 가장자리 눈금</small></span><input id="rulerToggle" type="checkbox" checked /><i></i></label>
+            </div>
+          </section>
+
+          <div class="accuracy-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg>
+            <p><strong>정확도를 유지하려면</strong> 브라우저 확대를 100%로 두고, 모니터 배율이나 창을 바꾼 뒤에는 다시 보정하세요.</p>
+          </div>
+        </aside>
+
+        <section class="workspace" aria-label="실물 크기 작업 공간">
+          <div class="workspace-toolbar">
+            <div>
+              <strong>600 × 400 mm 작업 보드</strong>
+              <span>눈금 1 mm · 굵은 선 10 mm</span>
+            </div>
+            <div class="workspace-actions">
+              <span class="browser-zoom-note">브라우저 배율 <b>100%</b> 권장</span>
+              <button class="secondary-button" id="toolbarUpload" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5M4 14v5h16v-5"/></svg>
+                이미지 불러오기
+              </button>
+            </div>
+          </div>
+
+          <div class="calibration-bench" id="calibrationBench">
+            <div class="bench-label">
+              <span>CALIBRATION LINE</span>
+              <strong><b id="benchTargetLabel">100</b> mm 기준선</strong>
+              <small>양 끝을 실제 자의 0과 <b id="benchTargetHint">100 mm</b>에 맞추세요</small>
+            </div>
+            <div class="calibration-scroll">
+              <div class="calibration-line-wrap" id="calibrationLineWrap">
+                <div class="calibration-line" id="calibrationLine">
+                  <span class="line-cap start"></span>
+                  <span class="line-mid" aria-hidden="true"></span>
+                  <button class="line-handle" id="calibrationHandle" type="button" aria-label="기준선 끝점 드래그">
+                    <span></span><small>드래그</small>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button class="bench-close" id="closeCalibration" type="button" aria-label="보정 영역 접기">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+            </button>
+          </div>
+
+          <div class="board-viewport" id="boardViewport">
+            <div class="drop-overlay" id="dropOverlay"><strong>여기에 놓아 불러오기</strong><span>PNG, JPG, WebP</span></div>
+            <div class="board-shell" id="boardShell">
+              <div class="ruler-corner" aria-hidden="true"><span>mm</span></div>
+              <div class="ruler horizontal-ruler" id="horizontalRuler" aria-hidden="true"></div>
+              <div class="ruler vertical-ruler" id="verticalRuler" aria-hidden="true"></div>
+              <div class="measurement-board" id="measurementBoard">
+                <div class="origin-label" aria-hidden="true">0</div>
+                <button class="board-empty" id="boardEmpty" type="button">
+                  <span class="empty-crosshair">
+                    <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="13"/><path d="M24 4v11m0 18v11M4 24h11m18 0h11"/></svg>
+                  </span>
+                  <strong>이미지를 놓고 실물 크기로 확인하세요</strong>
+                  <small>클릭하거나 파일을 이 영역으로 끌어오세요</small>
+                  <em>이미지 선택</em>
+                </button>
+                <div class="image-object" id="imageObject" tabindex="0" hidden aria-label="선택된 이미지. 드래그해 이동할 수 있습니다.">
+                  <img id="stageImage" alt="실물 크기로 표시된 이미지" draggable="false" />
+                  <span class="selection-outline" aria-hidden="true"></span>
+                  <button class="resize-handle nw" data-handle="nw" type="button" aria-label="왼쪽 위에서 크기 조절"></button>
+                  <button class="resize-handle ne" data-handle="ne" type="button" aria-label="오른쪽 위에서 크기 조절"></button>
+                  <button class="resize-handle sw" data-handle="sw" type="button" aria-label="왼쪽 아래에서 크기 조절"></button>
+                  <button class="resize-handle se" data-handle="se" type="button" aria-label="오른쪽 아래에서 크기 조절"></button>
+                  <span class="size-badge" id="sizeBadge">100.0 × 66.7 mm</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
