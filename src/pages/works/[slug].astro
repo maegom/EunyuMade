@@ -1,0 +1,12 @@
+---
+// 시리즈에 묶이지 않는 독립 프로젝트: /works/<slug>
+import ProjectPage from '../../components/ProjectPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.series);
+  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+---
+<ProjectPage entry={entry} />

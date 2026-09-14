@@ -1,65 +1,98 @@
 ---
 import Base from '../layouts/Base.astro';
-import Shelf from '../components/Shelf.astro';
+import Tile from '../components/Tile.astro';
 import type { TileItem } from '../components/Tile.astro';
 import { getCollection } from 'astro:content';
+import { site, soloLabel, projectHref } from '../data/site';
 
-// 특집 타일이 줄의 맨 앞에 오고, 그 다음은 시리즈 안 순서.
-const projects = (await getCollection('projects')).sort(
-  (a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order
-);
-const series = await getCollection('series');
-const lab = (await getCollection('lab')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const seriesTitle = (id: string) => series.find((s) => s.id === id)?.data.title ?? id;
+const seriesAll = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
+const seriesOf = (id?: string) => (id ? seriesAll.find((s) => s.id === id) : undefined);
 
-const toItem = (p: (typeof projects)[number]): TileItem => ({
+// 아이디어 단계는 선반에 올리지 않습니다. 특집이 맨 앞, 그 다음은 순서.
+const projects = (await getCollection('projects'))
+  .filter((p) => p.data.status !== 'idea')
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order);
+
+const items: TileItem[] = projects.map((p) => ({
   title: p.data.title,
-  href: `/${p.data.series}/${p.id}`,
+  href: projectHref(p.data.series, p.id),
   kind: p.data.kind,
   status: p.data.status,
-  series: seriesTitle(p.data.series),
-  cover: p.data.cover,
+  series: seriesOf(p.data.series)?.data.title ?? soloLabel,
+  cat: p.data.series ?? 'solo',
+  cover: p.data.cover ?? seriesOf(p.data.series)?.data.cover,
   loop: p.data.loop,
   one_line: p.data.one_line,
   runnable: !!p.data.play_url,
   featured: p.data.featured,
-});
+}));
 
-// 선반의 줄: 만든 것 → 만드는 중 → 실험. 빈 줄은 표시하지 않습니다.
-const made = projects.filter((p) => ['made', 'exhibited'].includes(p.data.status)).map(toItem);
-const making = projects.filter((p) => ['prototype', 'making'].includes(p.data.status)).map(toItem);
-const aboutTile: TileItem = {
+// 은유제작소 자체(정체성 프로젝트)도 독립 프로젝트 하나로 올립니다.
+items.push({
   title: '은유제작소',
   href: '/about',
   kind: 'web',
   status: 'making',
-  one_line: '설명하는 대신 체험하게 하는 페이지. 콘셉트를 정하는 중.',
-};
-const experiments: TileItem[] = [
-  ...projects.filter((p) => p.data.status === 'experiment').map(toItem),
-  ...lab.map((l) => ({
-    title: l.data.title,
-    href: `/lab/${l.id}`,
-    kind: l.data.kind,
-    status: 'experiment' as const,
-    cover: l.data.cover,
-    loop: l.data.loop,
-    one_line: l.data.summary,
-    runnable: !!l.data.play_url,
-  })),
+  series: soloLabel,
+  cat: 'solo',
+  cover: site.mark,
+  contain: true,
+  one_line: '설명하는 대신 체험하게 하는 페이지',
+});
+
+const cats = [
+  ...seriesAll
+    .filter((s) => items.some((i) => i.cat === s.id))
+    .map((s) => ({ id: s.id, label: `${s.data.title} 시리즈`, tagline: s.data.tagline, href: `/${s.id}` })),
+  ...(items.some((i) => i.cat === 'solo') ? [{ id: 'solo', label: soloLabel, tagline: '시리즈에 묶이지 않는 하나짜리 작업', href: '' }] : []),
 ];
+const count = (id: string) => items.filter((i) => i.cat === id).length;
 const nowList = projects.filter((p) => ['prototype', 'making'].includes(p.data.status)).map((p) => p.data.title);
 ---
 <Base>
   <main class="container">
     <section class="intro">
       <h1>은유제작소가 만든 것들.</h1>
+      <p class="intro-sub">{site.tagline}</p>
       {nowList.length > 0 && (
         <p class="now"><span class="now-dot" aria-hidden="true"></span>지금 만드는 중: {nowList.join(', ')}</p>
       )}
     </section>
-    <Shelf title="만든 것" items={made} />
-    <Shelf title="만드는 중" items={[...making, aboutTile]} />
-    <Shelf title="실험" items={experiments} />
+
+    {cats.length > 1 && (
+      <div class="tabs" role="tablist" aria-label="분류">
+        <button class="tab" role="tab" type="button" aria-selected="true" data-cat="all">전체 <span class="cnt">{items.length}</span></button>
+        {cats.map((c) => (
+          <button class="tab" role="tab" type="button" aria-selected="false" data-cat={c.id}>{c.label} <span class="cnt">{count(c.id)}</span></button>
+        ))}
+      </div>
+    )}
+
+    {cats.map((c) => (
+      <div class="strip" data-strip={c.id} hidden>
+        <div><b>{c.label}</b><span>{c.tagline}</span></div>
+        {c.href && <a class="btn small" href={c.href}>시리즈 페이지 →</a>}
+      </div>
+    ))}
+
+    <div class="shelf-grid" id="grid">
+      {items.map((item) => <Tile {...item} />)}
+    </div>
   </main>
 </Base>
+
+<script>
+  // 분류 탭: 정적 페이지 위의 작은 필터. 기본은 전체.
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.tab'));
+  const tiles = Array.from(document.querySelectorAll<HTMLElement>('#grid [data-cat]'));
+  const strips = Array.from(document.querySelectorAll<HTMLElement>('[data-strip]'));
+  function pick(cat: string) {
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.cat === cat)));
+    tiles.forEach((el) => { el.hidden = cat !== 'all' && el.dataset.cat !== cat; });
+    strips.forEach((s) => { s.hidden = s.dataset.strip !== cat; });
+    try { history.replaceState(null, '', cat === 'all' ? location.pathname : `#${cat}`); } catch {}
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => pick(t.dataset.cat || 'all')));
+  const initial = location.hash.slice(1);
+  if (initial && tabs.some((t) => t.dataset.cat === initial)) pick(initial);
+</script>

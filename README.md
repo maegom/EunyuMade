@@ -9,26 +9,30 @@ src/
   content/
     projects/   프로젝트 하나 = 파일 하나 (예: malangmung.md)
     series/     시리즈 하나 = 파일 하나 (예: happy.md)
-    lab/        실험 하나 = 파일 하나
-  data/site.ts  이름, 메일, 소셜 링크 (비어 있으면 사이트에 표시되지 않음)
-  pages/        / (선반), /[series], /[series]/[slug], /lab, /about, /card, 404
+  data/site.ts  이름, 메일, 로고 경로, 소셜 링크 (비어 있으면 사이트에 표시되지 않음)
+  pages/        / (전체 목록), /[series] (시리즈 허브), /[series]/[slug], /works/[slug], /about, /card, 404
+  components/ProjectPage.astro   프로젝트 상세 페이지 템플릿
 public/
-  assets/       이미지, 로고
-  play/         실행형 페이지 (예: /play/happy-toy)
-  eunyumade.vcf 명함의 "연락처 저장"
+  assets/logo/    eunyu-logo.png (로고), eunyu-mark.png (픽토그램)
+  assets/images/  프로젝트 이미지 (<slug>/cover.webp ...)
+  favicon.png, apple-touch-icon.png
+  play/           실행형 페이지 (예: /play/happy-toy, 지금은 링크되지 않음)
+  eunyumade.vcf   명함의 "연락처 저장"
 apps/
-  true-size/    별도 Vercel 프로젝트로 배포하는 실물 크기 스튜디오
+  true-size/      별도 Vercel 프로젝트로 배포하는 실물 크기 스튜디오 (truesize.eunyumade.com)
+design/logo-src/  로고 원본 보관 (서빙되지 않음)
 ```
 
 ## 새 프로젝트 추가
 
-1. `src/content/projects/<slug>.md`를 만듭니다. 아래 항목 중 `title`, `series`, `kind`, `status`, `one_line`은 필수입니다.
+`src/content/projects/<slug>.md`를 만듭니다. `title`, `kind`, `status`, `one_line`은 필수입니다.
+`series`를 쓰면 그 시리즈에 묶이고 주소는 `/<series>/<slug>`, 쓰지 않으면 독립 프로젝트로 `/works/<slug>`가 됩니다.
 
 ```md
 ---
 title: 말랑멍
-series: happy            # src/content/series/<slug>.md 의 파일명
-verb: 만지기             # 시리즈 허브에서 쓰는 동사
+series: happy            # 생략하면 독립 프로젝트
+verb: 만지기             # 시리즈 허브에서 이름 위에 붙는 한 단어 (선택)
 kind: web                # web | object | installation | experiment
 status: prototype        # idea | experiment | prototype | making | made | exhibited
 year: 2026
@@ -37,12 +41,12 @@ inputs: 카메라 손 추적
 outputs: 캐릭터 변형과 표정
 tech: [MediaPipe Hand Landmarker, Canvas]
 materials: []            # 실물이면 재료
-cover: /assets/images/malangmung/cover.jpg   # 정사각형
-loop: /assets/images/malangmung/loop.mp4     # 3~6초, 소리 없음 (선택)
-hero: /assets/images/malangmung/hero.mp4     # 히어로 영상 (선택)
-play_url: /play/malangmung                   # 실행 페이지가 있으면 "실행하기" 버튼
-featured: true           # 선반에서 두 칸짜리 특집
-order: 2                 # 시리즈 안 순서
+cover: /assets/images/malangmung/cover.webp   # 타일과 히어로 이미지
+loop: /assets/images/malangmung/loop.mp4      # 3~6초, 소리 없음 (선택)
+hero: /assets/images/malangmung/hero.mp4      # 상세 페이지 히어로 영상 (선택)
+play_url: /play/malangmung                    # 실행 페이지가 있으면 "실행하기" 버튼
+featured: true           # 목록 맨 앞의 두 칸짜리 타일
+order: 2                 # 묶음 안 순서
 relations:
   - slug: pocketmung
     note: 손 추적이 터치와 자이로로 이어집니다
@@ -53,10 +57,10 @@ traces:
 본문은 마크다운으로. 세 문장 이내를 권합니다.
 ```
 
-2. 이미지는 `public/assets/images/<slug>/`에 넣습니다.
-3. 커밋하고 푸시하면 선반, 시리즈 허브, 프로젝트 페이지가 자동으로 생깁니다.
-
-상태의 뜻: 아이디어(허브에만 표시) → 실험 → 프로토타입 → 제작 중 → 완성 → 전시. 선반의 줄은 상태로 정해집니다.
+- 이미지는 `public/assets/images/<slug>/`에 넣습니다. 커버는 세로가 긴 이미지도 괜찮습니다. 타일이 알아서 가운데를 보여줍니다.
+- `status`가 `idea`면 목록에는 오르지 않고 시리즈 허브의 "다음 구성원"에만 표시됩니다.
+- 상태는 목록에서 작은 칩으로만 드러납니다. 만드는 중과 완성을 따로 나누지 않습니다.
+- 목록의 분류 탭은 시리즈 파일에서 자동으로 만들어집니다. 새 시리즈는 `src/content/series/<slug>.md` 하나면 됩니다.
 
 ## 실행형 페이지
 

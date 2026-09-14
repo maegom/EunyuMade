@@ -1,0 +1,97 @@
+---
+// 프로젝트 상세 페이지. 시리즈 소속(/<series>/<slug>)과 독립(/works/<slug>) 양쪽에서 씁니다.
+import Base from '../layouts/Base.astro';
+import StatusChip from './StatusChip.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { kindLabel, statusLabel, soloLabel, projectHref } from '../data/site';
+
+interface Props { entry: CollectionEntry<'projects'> }
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const series = d.series ? (await getCollection('series')).find((s) => s.id === d.series) : undefined;
+const groupTitle = series?.data.title ?? soloLabel;
+const groupHref = series ? `/${series.id}` : '/#solo';
+
+// 같은 묶음 안에서 다음 프로젝트 (아이디어 단계 제외)
+const siblings = (await getCollection('projects', ({ data }) => (d.series ? data.series === d.series : !data.series)))
+  .sort((a, b) => a.data.order - b.data.order);
+const idx = siblings.findIndex((s) => s.id === entry.id);
+const next = siblings.slice(idx + 1).find((s) => s.data.status !== 'idea') ?? siblings.find((s) => s.id !== entry.id && s.data.status !== 'idea');
+const rel = d.relations.map((r) => ({ ...r, target: siblings.find((s) => s.id === r.slug) }));
+const cover = d.cover ?? series?.data.cover;
+---
+<Base title={d.title} description={d.one_line} ogImage={cover}>
+  <main class="container page">
+    <div class="crumb"><a href="/">만든 것</a><span>›</span><a href={groupHref}>{groupTitle}</a><span>›</span><span>{d.title}</span></div>
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">{d.title}</h1>
+        <p class="page-sub">{d.one_line}</p>
+      </div>
+      <div class="page-tags"><span class="chip">{kindLabel[d.kind]}</span><StatusChip status={d.status} /></div>
+    </div>
+
+    <div class="hero-media">
+      {d.hero
+        ? <video src={d.hero} autoplay muted loop playsinline poster={cover}></video>
+        : cover
+          ? <img src={cover} alt={`${d.title} 대표 이미지`} />
+          : <div class="placeholder"><b>{d.title}</b>영상이 들어올 자리입니다</div>}
+    </div>
+
+    <div class="two">
+      <div>
+        <div class="prose" style="margin-top:4px"><Content /></div>
+
+        <h2 class="sec-title">체험하기</h2>
+        {d.play_url ? (
+          <div class="touch"><p><b>브라우저에서 바로 실행됩니다.</b> 카메라나 센서가 필요하면 실행 화면에서 안내합니다.</p><a class="btn primary" href={d.play_url}>실행하기</a></div>
+        ) : d.companion ? (
+          <div class="touch"><p><b>{d.companion.label}</b> 실물의 반응을 웹에서 흉내낸 동반 모듈입니다.</p><a class="btn" href={d.companion.url}>열어보기</a></div>
+        ) : (
+          <div class="touch"><p>체험할 수 있는 버전을 준비하고 있습니다. 지금은 {statusLabel[d.status]} 상태입니다.</p></div>
+        )}
+
+        {d.traces.length > 0 && (
+          <>
+            <h2 class="sec-title">제작 흔적</h2>
+            <div class="traces">
+              {d.traces.map((t) => <figure><img src={t.src} alt={t.caption ?? ''} loading="lazy" />{t.caption && <figcaption>{t.caption}</figcaption>}</figure>)}
+            </div>
+          </>
+        )}
+
+        {rel.length > 0 && (
+          <>
+            <h2 class="sec-title">이어짐</h2>
+            <div class="rel">
+              {rel.map((r) => r.target && r.target.data.status !== 'idea'
+                ? <a class="rel-card" href={projectHref(r.target.data.series, r.slug)}><b>{r.target.data.title}</b><span>{r.note}</span></a>
+                : <div class="rel-card"><b>{r.target?.data.title ?? r.slug}</b><span>{r.note}</span></div>)}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div>
+        <h2 class="sec-title">사양</h2>
+        <dl class="spec">
+          <div><dt>분류</dt><dd><a href={groupHref}>{groupTitle}</a></dd></div>
+          <div><dt>매체</dt><dd>{kindLabel[d.kind]}</dd></div>
+          <div><dt>상태</dt><dd>{statusLabel[d.status]}</dd></div>
+          {d.year && <div><dt>연도</dt><dd>{d.year}</dd></div>}
+          {d.inputs && <div><dt>입력</dt><dd>{d.inputs}</dd></div>}
+          {d.outputs && <div><dt>출력</dt><dd>{d.outputs}</dd></div>}
+          {d.tech.length > 0 && <div><dt>기술</dt><dd>{d.tech.join(' · ')}</dd></div>}
+          {d.materials.length > 0 && <div><dt>재료</dt><dd>{d.materials.join(' · ')}</dd></div>}
+        </dl>
+      </div>
+    </div>
+
+    <div class="next">
+      <a href={groupHref}>← {groupTitle}</a>
+      {next && <a href={projectHref(next.data.series, next.id)}>다음: {next.data.title} →</a>}
+    </div>
+  </main>
+</Base>

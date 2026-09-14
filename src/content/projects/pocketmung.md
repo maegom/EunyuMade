@@ -10,6 +10,7 @@ inputs: 터치 · 자이로
 outputs: 캐릭터 반응
 tech: [ESP32]
 materials: [3D 프린팅 케이스]
+cover: /assets/images/pocketmung/cover.webp
 order: 1
 relations:
   - slug: malangmung

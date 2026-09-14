@@ -7,22 +7,24 @@ export interface TileItem {
   href: string;
   kind: Kind;
   status: Status;
-  series?: string;
+  series?: string; // 표시용 분류 이름 (예: HAPPY, 독립 프로젝트)
+  cat?: string; // 필터용 분류 키 (예: happy, solo)
   cover?: string;
+  contain?: boolean; // 커버를 잘라내지 않고 여백을 두고 넣기 (픽토그램 등)
   loop?: string;
   one_line?: string;
   runnable?: boolean;
   featured?: boolean;
 }
 interface Props extends TileItem {}
-const { title, href, kind, status, series, cover, loop, one_line, runnable = false, featured = false } = Astro.props;
+const { title, href, kind, status, series, cat, cover, contain = false, loop, one_line, runnable = false, featured = false } = Astro.props;
 const dim = status === 'idea';
 const Tag = dim ? 'div' : 'a';
 ---
-<Tag class:list={['tile', { feat: featured, dim }]} href={dim ? undefined : href}>
+<Tag class:list={['tile', { feat: featured, dim, contain }]} href={dim ? undefined : href} data-cat={cat}>
   <div class="tile-media">
     {cover
-      ? <img src={cover} alt="" loading="lazy" width="600" height="600" />
+      ? <img src={cover} alt="" loading="lazy" />
       : <div class="tile-type" aria-hidden="true"><span>{title}</span></div>}
     {loop && <video src={loop} muted loop playsinline preload="none" aria-hidden="true"></video>}
   </div>

@@ -9,6 +9,7 @@ one_line: 손으로 잡고 늘리는 HAPPY
 inputs: 카메라 손 추적
 outputs: 캐릭터 변형과 표정
 tech: [MediaPipe Hand Landmarker, Canvas]
+cover: /assets/images/malangmung/cover.webp
 featured: true
 order: 2
 relations:
