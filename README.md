@@ -44,7 +44,13 @@ materials: []            # 실물이면 재료
 cover: /assets/images/malangmung/cover.webp   # 타일과 히어로 이미지
 loop: /assets/images/malangmung/loop.mp4      # 3~6초, 소리 없음 (선택)
 hero: /assets/images/malangmung/hero.mp4      # 상세 페이지 히어로 영상 (선택)
-play_url: /play/malangmung                    # 실행 페이지가 있으면 "실행하기" 버튼
+plays:                                        # 체험(실행) 링크. 첫 항목이 목록 타일의 "실행하기" 버튼
+  - label: 말랑멍 웹
+    url: https://mallang.eunyumade.com/       # 다른 도메인이면 새 탭으로 열림
+    note: 카메라 권한이 필요합니다.
+  # - label: 다마고치                          # 둘 이상이면 타일은 "실행하기 · 2개"로 상세 페이지의 체험하기로 이동
+  #   url: https://pocketmung.eunyumade.com/tamagotchi/
+play_url: /play/malangmung                    # 링크가 하나뿐일 때 쓰는 짧은 형태 (plays와 같이 써도 됨)
 featured: true           # 목록 맨 앞의 두 칸짜리 타일
 order: 2                 # 묶음 안 순서
 relations:

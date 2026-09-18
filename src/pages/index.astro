@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Tile from '../components/Tile.astro';
 import type { TileItem } from '../components/Tile.astro';
 import { getCollection } from 'astro:content';
-import { site, soloLabel, projectHref } from '../data/site';
+import { site, soloLabel, projectHref, getPlays } from '../data/site';
 
 const seriesAll = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
 const seriesOf = (id?: string) => (id ? seriesAll.find((s) => s.id === id) : undefined);
@@ -23,7 +23,7 @@ const items: TileItem[] = projects.map((p) => ({
   cover: p.data.cover ?? seriesOf(p.data.series)?.data.cover,
   loop: p.data.loop,
   one_line: p.data.one_line,
-  runnable: !!p.data.play_url,
+  plays: getPlays(p.data),
   featured: p.data.featured,
 }));
 

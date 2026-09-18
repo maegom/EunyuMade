@@ -1,6 +1,6 @@
 ---
 import StatusChip from './StatusChip.astro';
-import { kindLabel, type Kind, type Status } from '../data/site';
+import { kindLabel, isExternal, type Kind, type Status, type Play } from '../data/site';
 
 export interface TileItem {
   title: string;
@@ -13,15 +13,17 @@ export interface TileItem {
   contain?: boolean; // 커버를 잘라내지 않고 여백을 두고 넣기 (픽토그램 등)
   loop?: string;
   one_line?: string;
-  runnable?: boolean;
+  plays?: Play[]; // 첫 항목이 타일의 "실행하기" 버튼
   featured?: boolean;
 }
 interface Props extends TileItem {}
-const { title, href, kind, status, series, cat, cover, contain = false, loop, one_line, runnable = false, featured = false } = Astro.props;
+const { title, href, kind, status, series, cat, cover, contain = false, loop, one_line, plays = [], featured = false } = Astro.props;
 const dim = status === 'idea';
-const Tag = dim ? 'div' : 'a';
+const play = plays[0];
+const multi = plays.length > 1;
+const ext = play ? isExternal(play.url) : false;
 ---
-<Tag class:list={['tile', { feat: featured, dim, contain }]} href={dim ? undefined : href} data-cat={cat}>
+<article class:list={['tile', { feat: featured, dim, contain }]} data-cat={cat}>
   <div class="tile-media">
     {cover
       ? <img src={cover} alt="" loading="lazy" />
@@ -36,7 +38,10 @@ const Tag = dim ? 'div' : 'a';
       </span>
       <StatusChip status={status} />
     </div>
-    <div class="tile-title">{runnable && <span class="live" title="실행 가능"></span>}{title}</div>
+    <div class="tile-title">{dim ? title : <a class="tile-link" href={href}>{title}</a>}</div>
     {one_line && <div class="tile-line">{one_line}</div>}
+    {play && !dim && (multi
+      ? <a class="play-pill" href={`${href}#play`}>실행하기 · {plays.length}개 →</a>
+      : <a class="play-pill" href={play.url} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>실행하기{ext ? ' ↗' : ''}</a>)}
   </div>
-</Tag>
+</article>

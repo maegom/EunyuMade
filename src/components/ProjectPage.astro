@@ -3,7 +3,7 @@
 import Base from '../layouts/Base.astro';
 import StatusChip from './StatusChip.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { kindLabel, statusLabel, soloLabel, projectHref } from '../data/site';
+import { kindLabel, statusLabel, soloLabel, projectHref, getPlays, isExternal } from '../data/site';
 
 interface Props { entry: CollectionEntry<'projects'> }
 const { entry } = Astro.props;
@@ -20,6 +20,7 @@ const idx = siblings.findIndex((s) => s.id === entry.id);
 const next = siblings.slice(idx + 1).find((s) => s.data.status !== 'idea') ?? siblings.find((s) => s.id !== entry.id && s.data.status !== 'idea');
 const rel = d.relations.map((r) => ({ ...r, target: siblings.find((s) => s.id === r.slug) }));
 const cover = d.cover ?? series?.data.cover;
+const plays = getPlays(d);
 ---
 <Base title={d.title} description={d.one_line} ogImage={cover}>
   <main class="container page">
@@ -44,9 +45,19 @@ const cover = d.cover ?? series?.data.cover;
       <div>
         <div class="prose" style="margin-top:4px"><Content /></div>
 
-        <h2 class="sec-title">체험하기</h2>
-        {d.play_url ? (
-          <div class="touch"><p><b>브라우저에서 바로 실행됩니다.</b> 카메라나 센서가 필요하면 실행 화면에서 안내합니다.</p><a class="btn primary" href={d.play_url}>실행하기</a></div>
+        <h2 class="sec-title" id="play">체험하기</h2>
+        {plays.length > 0 ? (
+          <div class="plays">
+            {plays.map((p) => {
+              const ext = isExternal(p.url);
+              return (
+                <div class="touch">
+                  <p><b>{p.label}</b>{p.note && <span> — {p.note}</span>}</p>
+                  <a class="btn primary" href={p.url} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>실행하기{ext ? ' ↗' : ''}</a>
+                </div>
+              );
+            })}
+          </div>
         ) : d.companion ? (
           <div class="touch"><p><b>{d.companion.label}</b> 실물의 반응을 웹에서 흉내낸 동반 모듈입니다.</p><a class="btn" href={d.companion.url}>열어보기</a></div>
         ) : (

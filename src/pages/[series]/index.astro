@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import StatusChip from '../../components/StatusChip.astro';
 import { getCollection, render } from 'astro:content';
-import { kindLabel } from '../../data/site';
+import { kindLabel, getPlays, isExternal } from '../../data/site';
 
 export async function getStaticPaths() {
   const all = await getCollection('series');
@@ -32,16 +32,22 @@ const threads = members.flatMap((m) =>
     <div class="members">
       {members.map((m) => {
         const dim = m.data.status === 'idea';
-        const Tag = dim ? 'div' : 'a';
+        const href = `/${entry.id}/${m.id}`;
         const cover = m.data.cover;
+        const plays = getPlays(m.data);
+        const play = plays[0];
+        const ext = play ? isExternal(play.url) : false;
         return (
-          <Tag class:list={['member', { dim }]} href={dim ? undefined : `/${entry.id}/${m.id}`}>
+          <article class:list={['member', { dim }]}>
             {cover && <span class="member-art"><img src={cover} alt="" loading="lazy" /></span>}
             {m.data.verb && <span class="member-verb">{m.data.verb}</span>}
-            <span class="member-name">{m.data.title}</span>
+            <span class="member-name">{dim ? m.data.title : <a class="member-link" href={href}>{m.data.title}</a>}</span>
             <span class="member-line">{m.data.one_line}</span>
+            {play && !dim && (plays.length > 1
+              ? <a class="play-pill" href={`${href}#play`}>실행하기 · {plays.length}개 →</a>
+              : <a class="play-pill" href={play.url} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>실행하기{ext ? ' ↗' : ''}</a>)}
             <span class="member-foot"><span>{kindLabel[m.data.kind]}{m.data.year ? ` · ${m.data.year}` : ''}</span><StatusChip status={m.data.status} /></span>
-          </Tag>
+          </article>
         );
       })}
     </div>

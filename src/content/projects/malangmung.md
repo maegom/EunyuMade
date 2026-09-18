@@ -12,6 +12,10 @@ tech: [MediaPipe Hand Landmarker, Canvas]
 cover: /assets/images/malangmung/cover.webp
 featured: true
 order: 2
+plays:
+  - label: 말랑멍 웹
+    url: https://mallang.eunyumade.com/
+    note: 카메라 앞에서 손으로 HAPPY를 잡고 늘려 보세요. 카메라 권한이 필요합니다.
 relations:
   - slug: pocketmung
     note: 손 추적이 터치와 자이로로 이어집니다

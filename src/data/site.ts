@@ -44,6 +44,19 @@ export const kindLabel: Record<Kind, string> = {
 /** 독립 프로젝트의 카테고리 이름 */
 export const soloLabel = '독립 프로젝트';
 
+/** 체험(실행) 링크 하나 */
+export interface Play { label: string; url: string; note?: string }
+
+/** play_url과 plays를 합쳐 체험 목록으로. play_url이 앞에 옵니다. */
+export function getPlays(data: { play_url?: string; plays?: Play[] }): Play[] {
+  const list = [...(data.plays ?? [])];
+  if (data.play_url && !list.some((p) => p.url === data.play_url)) list.unshift({ label: '실행하기', url: data.play_url });
+  return list;
+}
+
+/** 다른 도메인(별도 배포 앱)이면 새 탭으로 엽니다. */
+export const isExternal = (url: string) => /^https?:\/\//.test(url);
+
 /** 프로젝트 주소: 시리즈가 있으면 /<series>/<slug>, 없으면 /works/<slug> */
 export function projectHref(series: string | undefined, id: string): string {
   return series ? `/${series}/${id}` : `/works/${id}`;

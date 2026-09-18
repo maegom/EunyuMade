@@ -23,7 +23,9 @@ const projects = defineCollection({
     cover: z.string().optional(), // /assets/... 타일과 히어로에 쓰는 이미지
     loop: z.string().optional(), // /assets/... 3~6초 루프 영상 (호버 시 재생)
     hero: z.string().optional(), // /assets/... 상세 페이지 히어로 영상
-    play_url: z.string().optional(), // 실행 페이지. 있으면 "실행하기" 버튼
+    play_url: z.string().optional(), // 실행 페이지 하나. 있으면 "실행하기" 버튼
+    // 체험이 여러 개면 여기에. 첫 항목이 목록 타일의 "실행하기" 버튼이 됩니다.
+    plays: z.array(z.object({ label: z.string(), url: z.string(), note: z.string().optional() })).default([]),
     companion: z.object({ url: z.string(), label: z.string().default('웹에서 흉내낸 것') }).optional(),
     relations: z.array(z.object({ slug: z.string(), note: z.string() })).default([]),
     traces: z.array(z.object({ src: z.string(), caption: z.string().optional() })).default([]),
