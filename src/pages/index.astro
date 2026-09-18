@@ -8,10 +8,17 @@ import { site, soloLabel, projectHref, getPlays } from '../data/site';
 const seriesAll = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
 const seriesOf = (id?: string) => (id ? seriesAll.find((s) => s.id === id) : undefined);
 
-// 아이디어 단계는 선반에 올리지 않습니다. 특집이 맨 앞, 그 다음은 순서.
+// 아이디어 단계는 선반에 올리지 않습니다.
+// 순서: featured가 맨 앞 → 시리즈 순서(series 파일의 order, 독립 프로젝트는 맨 뒤) → 프로젝트 order.
+const seriesOrder = (id?: string) => (id ? (seriesOf(id)?.data.order ?? 99) : 100);
 const projects = (await getCollection('projects'))
   .filter((p) => p.data.status !== 'idea')
-  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order);
+  .sort(
+    (a, b) =>
+      Number(b.data.featured) - Number(a.data.featured) ||
+      seriesOrder(a.data.series) - seriesOrder(b.data.series) ||
+      a.data.order - b.data.order
+  );
 
 const items: TileItem[] = projects.map((p) => ({
   title: p.data.title,
@@ -20,7 +27,7 @@ const items: TileItem[] = projects.map((p) => ({
   status: p.data.status,
   series: seriesOf(p.data.series)?.data.title ?? soloLabel,
   cat: p.data.series ?? 'solo',
-  cover: p.data.cover ?? seriesOf(p.data.series)?.data.cover,
+  cover: p.data.cover, // 사진이 없으면 이름이 들어간 타일로 표시됩니다.
   loop: p.data.loop,
   one_line: p.data.one_line,
   plays: getPlays(p.data),

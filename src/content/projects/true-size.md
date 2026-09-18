@@ -11,7 +11,7 @@ outputs: mm 단위 실물 크기 미리보기
 tech: [HTML, CSS, JavaScript, File API, Fullscreen API]
 materials: []
 play_url: https://truesize.eunyumade.com
-featured: true
+featured: false
 order: 1
 ---
 화면의 픽셀과 물리적인 길이가 어긋나는 문제에서 시작했습니다. 실제 자로 50·100·150 mm 기준선을 보정하면, 불러온 이미지를 원하는 mm 크기로 놓고 움직이며 확인할 수 있습니다.

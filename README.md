@@ -51,7 +51,7 @@ plays:                                        # 체험(실행) 링크. 1개면 "
   - label: 2인 게임
     url: https://pocketmung.eunyumade.com/co-op/
 play_url: /play/malangmung                    # 링크가 하나뿐일 때 쓰는 짧은 형태 (plays와 같이 써도 됨)
-featured: true           # 목록 맨 앞의 두 칸짜리 타일
+featured: true           # 목록 맨 앞의 두 칸짜리 타일. 그 뒤는 시리즈 순서(series 파일의 order) → 프로젝트 order
 order: 2                 # 묶음 안 순서
 relations:
   - slug: pocketmung
