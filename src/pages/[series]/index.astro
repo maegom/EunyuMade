@@ -35,17 +35,23 @@ const threads = members.flatMap((m) =>
         const href = `/${entry.id}/${m.id}`;
         const cover = m.data.cover;
         const plays = getPlays(m.data);
-        const play = plays[0];
-        const ext = play ? isExternal(play.url) : false;
+        const many = plays.length > 3;
         return (
           <article class:list={['member', { dim }]}>
             {cover && <span class="member-art"><img src={cover} alt="" loading="lazy" /></span>}
             {m.data.verb && <span class="member-verb">{m.data.verb}</span>}
             <span class="member-name">{dim ? m.data.title : <a class="member-link" href={href}>{m.data.title}</a>}</span>
             <span class="member-line">{m.data.one_line}</span>
-            {play && !dim && (plays.length > 1
-              ? <a class="play-pill" href={`${href}#play`}>실행하기 · {plays.length}개 →</a>
-              : <a class="play-pill" href={play.url} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>실행하기{ext ? ' ↗' : ''}</a>)}
+            {plays.length > 0 && !dim && (
+              <span class="play-row">
+                {many
+                  ? <a class="play-pill" href={`${href}#play`}>실행하기 · {plays.length}개 →</a>
+                  : plays.map((p) => {
+                      const ext = isExternal(p.url);
+                      return <a class="play-pill" href={p.url} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>{plays.length === 1 ? '실행하기' : p.label}{ext ? ' ↗' : ''}</a>;
+                    })}
+              </span>
+            )}
             <span class="member-foot"><span>{kindLabel[m.data.kind]}{m.data.year ? ` · ${m.data.year}` : ''}</span><StatusChip status={m.data.status} /></span>
           </article>
         );
