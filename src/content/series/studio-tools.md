@@ -1,7 +1,7 @@
 ---
 title: STUDIO TOOLS
 tagline: 만드는 감각을 화면 위의 정확한 도구로.
-description: 은유제작소의 제작 과정에서 반복되는 측정과 확인을 더 간단하게 만드는 작은 웹 도구들입니다.
+description: 은유제작소의 제작과 운영에서 반복되는 일을 더 간단하게 만드는 작은 웹 도구들입니다. 실물 크기 확인부터 이벤트 추첨까지.
 toy_url: https://truesize.eunyumade.com
 toy_label: 실물 크기 스튜디오
 common:
