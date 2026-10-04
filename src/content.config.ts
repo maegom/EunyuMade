@@ -5,15 +5,15 @@ const status = z.enum(['idea', 'experiment', 'prototype', 'making', 'made', 'exh
 const kind = z.enum(['web', 'object', 'installation', 'experiment']);
 
 // 프로젝트 하나 = src/content/projects/<slug>.md 파일 하나.
-// series가 있으면 /<series>/<slug>, 없으면 독립 프로젝트로 /works/<slug>.
+// series가 있으면 /<series>/<slug>, 없으면 "그 외"로 분류되어 /works/<slug>.
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
-    series: z.string().optional(), // 시리즈 slug (예: happy). 없으면 독립 프로젝트
+    series: z.string().optional(), // 시리즈 slug (예: happy). 없으면 "그 외"
     verb: z.string().optional(), // 시리즈 허브에서 쓰는 한 단어 (예: 만지기)
     kind,
-    status,
+    status: status.default('made'), // 화면에 표시하지 않음. idea면 목록에서 감춤
     year: z.number().optional(),
     one_line: z.string(),
     inputs: z.string().optional(),

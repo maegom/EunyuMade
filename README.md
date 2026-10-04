@@ -25,16 +25,16 @@ design/logo-src/  로고 원본 보관 (서빙되지 않음)
 
 ## 새 프로젝트 추가
 
-`src/content/projects/<slug>.md`를 만듭니다. `title`, `kind`, `status`, `one_line`은 필수입니다.
-`series`를 쓰면 그 시리즈에 묶이고 주소는 `/<series>/<slug>`, 쓰지 않으면 독립 프로젝트로 `/works/<slug>`가 됩니다.
+`src/content/projects/<slug>.md`를 만듭니다. `title`, `kind`, `one_line`은 필수입니다.
+`series`를 쓰면 그 시리즈에 묶이고 주소는 `/<series>/<slug>`, 쓰지 않으면 "그 외"로 분류되어 `/works/<slug>`가 됩니다.
 
 ```md
 ---
 title: 말랑멍
-series: happy            # 생략하면 독립 프로젝트
+series: happy            # 생략하면 "그 외"로 분류
 verb: 만지기             # 시리즈 허브에서 이름 위에 붙는 한 단어 (선택)
 kind: web                # web | object | installation | experiment
-status: prototype        # idea | experiment | prototype | making | made | exhibited
+status: idea             # 아직 아이디어뿐이라 목록에서 감추고 싶을 때만 씁니다. 평소에는 이 줄을 빼세요
 year: 2026
 one_line: 손으로 잡고 늘리는 HAPPY
 inputs: 카메라 손 추적
@@ -63,8 +63,7 @@ traces:
 ```
 
 - 이미지는 아래 "프로젝트 이미지" 규칙대로 폴더에 넣기만 하면 됩니다.
-- `status`가 `idea`면 목록에는 오르지 않고 시리즈 허브의 "다음 구성원"에만 표시됩니다.
-- 상태는 목록에서 작은 칩으로만 드러납니다. 만드는 중과 완성을 따로 나누지 않습니다.
+- `status: idea`인 프로젝트는 목록에 오르지 않고 시리즈 허브의 "다음 구성원"에만 표시됩니다. 그 밖의 상태는 화면에 표시하지 않습니다.
 - 목록의 분류 탭은 시리즈 파일에서 자동으로 만들어집니다. 새 시리즈는 `src/content/series/<slug>.md` 하나면 됩니다.
 
 ## 프로젝트 이미지

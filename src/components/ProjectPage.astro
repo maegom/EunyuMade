@@ -1,9 +1,8 @@
 ---
 // 프로젝트 상세 페이지. 시리즈 소속(/<series>/<slug>)과 독립(/works/<slug>) 양쪽에서 씁니다.
 import Base from '../layouts/Base.astro';
-import StatusChip from './StatusChip.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { kindLabel, statusLabel, soloLabel, projectHref, getPlays, isExternal } from '../data/site';
+import { kindLabel, soloLabel, projectHref, getPlays, isExternal } from '../data/site';
 import { projectImage } from '../data/images';
 
 interface Props { entry: CollectionEntry<'projects'> }
@@ -42,7 +41,7 @@ const firstExt = firstPlay ? isExternal(firstPlay.url) : false;
         <h1 class="page-title">{d.title}</h1>
         <p class="page-sub">{d.one_line}</p>
       </div>
-      <div class="page-tags"><span class="chip">{kindLabel[d.kind]}</span><StatusChip status={d.status} /></div>
+      <div class="page-tags"><span class="chip">{kindLabel[d.kind]}</span></div>
     </div>
 
     {d.hero ? (
@@ -81,7 +80,7 @@ const firstExt = firstPlay ? isExternal(firstPlay.url) : false;
         ) : d.companion ? (
           <div class="touch"><p><b>{d.companion.label}</b> 실물의 반응을 웹에서 흉내낸 동반 모듈입니다.</p><a class="btn" href={d.companion.url}>열어보기</a></div>
         ) : (
-          <div class="touch"><p>체험할 수 있는 버전을 준비하고 있습니다. 지금은 {statusLabel[d.status]} 상태입니다.</p></div>
+          <div class="touch"><p>체험할 수 있는 버전을 준비하고 있습니다.</p></div>
         )}
 
         {d.traces.length > 0 && (
@@ -110,7 +109,6 @@ const firstExt = firstPlay ? isExternal(firstPlay.url) : false;
         <dl class="spec">
           <div><dt>분류</dt><dd><a href={groupHref}>{groupTitle}</a></dd></div>
           <div><dt>매체</dt><dd>{kindLabel[d.kind]}</dd></div>
-          <div><dt>상태</dt><dd>{statusLabel[d.status]}</dd></div>
           {d.year && <div><dt>연도</dt><dd>{d.year}</dd></div>}
           {d.inputs && <div><dt>입력</dt><dd>{d.inputs}</dd></div>}
           {d.outputs && <div><dt>출력</dt><dd>{d.outputs}</dd></div>}

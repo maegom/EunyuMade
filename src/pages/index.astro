@@ -10,7 +10,7 @@ const seriesAll = (await getCollection('series')).sort((a, b) => a.data.order - 
 const seriesOf = (id?: string) => (id ? seriesAll.find((s) => s.id === id) : undefined);
 
 // 아이디어 단계는 선반에 올리지 않습니다.
-// 순서: featured가 맨 앞 → 시리즈 순서(series 파일의 order, 독립 프로젝트는 맨 뒤) → 프로젝트 order.
+// 순서: featured가 맨 앞 → 시리즈 순서(series 파일의 order, 시리즈 없는 프로젝트는 맨 뒤) → 프로젝트 order.
 const seriesOrder = (id?: string) => (id ? (seriesOf(id)?.data.order ?? 99) : 100);
 const projects = (await getCollection('projects'))
   .filter((p) => p.data.status !== 'idea')
@@ -39,7 +39,7 @@ const items: TileItem[] = await Promise.all(
   }))
 );
 
-// 은유제작소 자체(정체성 프로젝트)도 독립 프로젝트 하나로 올립니다.
+// 은유제작소 자체(정체성 프로젝트)도 "그 외"에 하나로 올립니다.
 items.push({
   title: '은유제작소',
   href: '/about',
@@ -56,7 +56,7 @@ const cats = [
   ...seriesAll
     .filter((s) => items.some((i) => i.cat === s.id))
     .map((s) => ({ id: s.id, label: `${s.data.title} 시리즈`, tagline: s.data.tagline, href: `/${s.id}` })),
-  ...(items.some((i) => i.cat === 'solo') ? [{ id: 'solo', label: soloLabel, tagline: '시리즈에 묶이지 않는 하나짜리 작업', href: '' }] : []),
+  ...(items.some((i) => i.cat === 'solo') ? [{ id: 'solo', label: soloLabel, tagline: '시리즈에 묶이지 않는 작업들', href: '' }] : []),
 ];
 const count = (id: string) => items.filter((i) => i.cat === id).length;
 ---

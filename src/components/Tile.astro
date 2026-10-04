@@ -1,5 +1,4 @@
 ---
-import StatusChip from './StatusChip.astro';
 import { kindLabel, isExternal, type Kind, type Status, type Play } from '../data/site';
 
 export interface TileItem {
@@ -7,7 +6,7 @@ export interface TileItem {
   href: string;
   kind: Kind;
   status: Status;
-  series?: string; // 표시용 분류 이름 (예: HAPPY, 독립 프로젝트)
+  series?: string; // 표시용 분류 이름 (예: HAPPY, 그 외)
   cat?: string; // 필터용 분류 키 (예: happy, solo)
   cover?: string;
   contain?: boolean; // 커버를 잘라내지 않고 여백을 두고 넣기 (픽토그램 등)
@@ -36,7 +35,6 @@ const many = plays.length > 3;
         {series && <span>{series}</span>}
         <span>{kindLabel[kind]}</span>
       </span>
-      <StatusChip status={status} />
     </div>
     <div class="tile-title">{dim ? title : <a class="tile-link" href={href}>{title}</a>}</div>
     {one_line && <div class="tile-line">{one_line}</div>}

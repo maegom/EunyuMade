@@ -24,15 +24,7 @@ export const site = {
 export type Status = 'idea' | 'experiment' | 'prototype' | 'making' | 'made' | 'exhibited';
 export type Kind = 'web' | 'object' | 'installation' | 'experiment';
 
-// 상태는 살짝만 드러냅니다. 프로토타입과 제작 중은 같은 말로.
-export const statusLabel: Record<Status, string> = {
-  idea: '아이디어',
-  experiment: '실험',
-  prototype: '만드는 중',
-  making: '만드는 중',
-  made: '완성',
-  exhibited: '전시',
-};
+// status는 화면에 표시하지 않습니다. 'idea'인 프로젝트를 목록에서 감추는 데에만 씁니다.
 
 export const kindLabel: Record<Kind, string> = {
   web: '웹',
@@ -41,8 +33,8 @@ export const kindLabel: Record<Kind, string> = {
   experiment: '실험',
 };
 
-/** 독립 프로젝트의 카테고리 이름 */
-export const soloLabel = '독립 프로젝트';
+/** 시리즈에 속하지 않는 프로젝트의 분류 이름 */
+export const soloLabel = '그 외';
 
 /** 체험(실행) 링크 하나 */
 export interface Play { label: string; url: string; note?: string }

@@ -86,9 +86,6 @@ h1,h2,h3{text-wrap:balance;line-height:1.25}
 
 /* 상태 칩 */
 .chip{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--ink2);white-space:nowrap;line-height:1.6;background:var(--surface)}
-.chip.blue{border-color:var(--blue-line);background:var(--blue-tint);color:var(--blue-deep)}
-.chip.solid{background:var(--blue);border-color:var(--blue);color:#fff}
-.chip.idea{border-style:dashed;background:transparent}
 
 /* 버튼 */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);font-weight:600;cursor:pointer;transition:border-color .15s,background .15s,color .15s}

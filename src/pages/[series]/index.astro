@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import StatusChip from '../../components/StatusChip.astro';
 import { getCollection, render } from 'astro:content';
 import { kindLabel, getPlays, isExternal } from '../../data/site';
 import { projectImage } from '../../data/images';
@@ -61,7 +60,7 @@ const hubArt = entry.data.cover ?? (lead ? (await projectImage(lead.id, 'cover',
                     })}
               </span>
             )}
-            <span class="member-foot"><span>{kindLabel[m.data.kind]}{m.data.year ? ` · ${m.data.year}` : ''}</span><StatusChip status={m.data.status} /></span>
+            <span class="member-foot"><span>{kindLabel[m.data.kind]}{m.data.year ? ` · ${m.data.year}` : ''}</span></span>
           </article>
         );
       })}
