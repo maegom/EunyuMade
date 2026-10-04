@@ -20,6 +20,8 @@ plays:
     url: https://pocketmung.eunyumade.com/co-op/
     note: 두 사람이 함께 노는 웹 게임
 relations:
+  - slug: pocketmung-inside
+    note: 포켓멍을 열어 안쪽을 살펴보는 제품 스터디
   - slug: malangmung
     note: 말랑멍의 손 추적이 기기의 터치와 자이로로 옮겨 왔습니다
 ---

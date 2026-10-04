@@ -10,10 +10,12 @@ export async function getStaticPaths() {
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const members = (await getCollection('projects', ({ data }) => data.series === entry.id)).sort((a, b) => a.data.order - b.data.order);
+const allProjects = await getCollection('projects');
+const members = allProjects.filter((p) => p.data.series === entry.id).sort((a, b) => a.data.order - b.data.order);
 const ideas = members.filter((m) => m.data.status === 'idea');
+// 이어짐은 다른 시리즈의 프로젝트로도 연결됩니다.
 const threads = members.flatMap((m) =>
-  m.data.relations.map((r) => ({ from: m.data.title, to: members.find((x) => x.id === r.slug)?.data.title ?? r.slug, note: r.note }))
+  m.data.relations.map((r) => ({ from: m.data.title, to: allProjects.find((x) => x.id === r.slug)?.data.title ?? r.slug, note: r.note }))
 );
 ---
 <Base title={`${entry.data.title} 시리즈`} description={entry.data.description} ogImage={entry.data.cover}>

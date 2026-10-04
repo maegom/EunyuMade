@@ -14,11 +14,14 @@ const groupTitle = series?.data.title ?? soloLabel;
 const groupHref = series ? `/${series.id}` : '/#solo';
 
 // 같은 묶음 안에서 다음 프로젝트 (아이디어 단계 제외)
-const siblings = (await getCollection('projects', ({ data }) => (d.series ? data.series === d.series : !data.series)))
+const all = await getCollection('projects');
+const siblings = all
+  .filter((p) => (d.series ? p.data.series === d.series : !p.data.series))
   .sort((a, b) => a.data.order - b.data.order);
 const idx = siblings.findIndex((s) => s.id === entry.id);
 const next = siblings.slice(idx + 1).find((s) => s.data.status !== 'idea') ?? siblings.find((s) => s.id !== entry.id && s.data.status !== 'idea');
-const rel = d.relations.map((r) => ({ ...r, target: siblings.find((s) => s.id === r.slug) }));
+// 이어짐은 다른 시리즈의 프로젝트로도 연결됩니다.
+const rel = d.relations.map((r) => ({ ...r, target: all.find((s) => s.id === r.slug) }));
 const cover = d.cover ?? series?.data.cover;
 const plays = getPlays(d);
 ---
