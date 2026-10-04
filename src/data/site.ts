@@ -9,7 +9,7 @@ export const site = {
   email: 'hoho7013@gmail.com',
   logo: '/assets/logo/eunyu-logo.png', // 449×244, 투명 배경
   mark: '/assets/logo/eunyu-mark.png', // 픽토그램 512×512, 투명 배경
-  ogImage: '/assets/images/happy/main.webp',
+  ogImage: '/assets/og/eunyumade.png', // 카톡 등에 링크를 보냈을 때 뜨는 기본 미리보기 이미지 (1200×630, 로고)
   // 비어 있는 링크는 사이트 어디에도 표시되지 않습니다. 생기는 날 채우면 버튼이 나타납니다.
   links: {
     instagram: 'https://www.instagram.com/eunyumade',
