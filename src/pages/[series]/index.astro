@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import StatusChip from '../../components/StatusChip.astro';
 import { getCollection, render } from 'astro:content';
 import { kindLabel, getPlays, isExternal } from '../../data/site';
+import { projectImage } from '../../data/images';
 
 export async function getStaticPaths() {
   const all = await getCollection('series');
@@ -17,6 +18,12 @@ const ideas = members.filter((m) => m.data.status === 'idea');
 const threads = members.flatMap((m) =>
   m.data.relations.map((r) => ({ from: m.data.title, to: allProjects.find((x) => x.id === r.slug)?.data.title ?? r.slug, note: r.note }))
 );
+// 구성원 썸네일: src/assets/projects/<slug>/cover.* 자동 사용
+const covers = new Map<string, string | undefined>();
+for (const m of members) covers.set(m.id, (await projectImage(m.id, 'cover', 640))?.src ?? m.data.cover);
+// 허브 대표 이미지: 시리즈 파일의 cover, 없으면 첫 구성원의 썸네일
+const lead = members.find((m) => m.data.status !== 'idea');
+const hubArt = entry.data.cover ?? (lead ? (await projectImage(lead.id, 'cover', 1000))?.src : undefined);
 ---
 <Base title={`${entry.data.title} 시리즈`} description={entry.data.description} ogImage={entry.data.cover}>
   <main class="container page">
@@ -27,7 +34,7 @@ const threads = members.flatMap((m) =>
         <p class="page-sub">{entry.data.tagline}</p>
         <p class="muted" style="margin-top:14px">{entry.data.description}</p>
       </div>
-      {entry.data.cover && <div class="art"><img src={entry.data.cover} alt={`${entry.data.title} 대표 이미지`} /></div>}
+      {hubArt && <div class="art"><img src={hubArt} alt={`${entry.data.title} 대표 이미지`} /></div>}
     </div>
 
     <h2 class="sec-title">구성원</h2>
@@ -35,7 +42,7 @@ const threads = members.flatMap((m) =>
       {members.map((m) => {
         const dim = m.data.status === 'idea';
         const href = `/${entry.id}/${m.id}`;
-        const cover = m.data.cover;
+        const cover = covers.get(m.id);
         const plays = getPlays(m.data);
         const many = plays.length > 3;
         return (

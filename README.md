@@ -14,7 +14,7 @@ src/
   components/ProjectPage.astro   프로젝트 상세 페이지 템플릿
 public/
   assets/logo/    eunyu-logo.png (로고), eunyu-mark.png (픽토그램)
-  assets/images/  프로젝트 이미지 (<slug>/cover.webp ...)
+  assets/images/  시리즈 대표 이미지 등 (프로젝트 이미지는 src/assets/projects/)
   favicon.png, apple-touch-icon.png
   play/           실행형 페이지 (예: /play/happy-toy, 지금은 링크되지 않음)
   eunyumade.vcf   명함의 "연락처 저장"
@@ -41,9 +41,8 @@ inputs: 카메라 손 추적
 outputs: 캐릭터 변형과 표정
 tech: [MediaPipe Hand Landmarker, Canvas]
 materials: []            # 실물이면 재료
-cover: /assets/images/malangmung/cover.webp   # 타일과 히어로 이미지
-loop: /assets/images/malangmung/loop.mp4      # 3~6초, 소리 없음 (선택)
-hero: /assets/images/malangmung/hero.mp4      # 상세 페이지 히어로 영상 (선택)
+# 이미지는 여기에 적지 않습니다. 아래 "프로젝트 이미지" 참고.
+hero: /assets/images/malangmung/hero.mp4      # 상세 페이지 맨 위를 영상으로 바꾸고 싶을 때만 (선택)
 plays:                                        # 체험(실행) 링크. 1개면 "실행하기", 2~3개면 이름별 버튼, 4개 이상이면 상세 페이지로
   - label: 다마고치
     url: https://pocketmung.eunyumade.com/play/   # 다른 도메인이면 새 탭으로 열림
@@ -63,10 +62,24 @@ traces:
 본문은 마크다운으로. 세 문장 이내를 권합니다.
 ```
 
-- 이미지는 `public/assets/images/<slug>/`에 넣습니다. 커버는 세로가 긴 이미지도 괜찮습니다. 타일이 알아서 가운데를 보여줍니다.
+- 이미지는 아래 "프로젝트 이미지" 규칙대로 폴더에 넣기만 하면 됩니다.
 - `status`가 `idea`면 목록에는 오르지 않고 시리즈 허브의 "다음 구성원"에만 표시됩니다.
 - 상태는 목록에서 작은 칩으로만 드러납니다. 만드는 중과 완성을 따로 나누지 않습니다.
 - 목록의 분류 탭은 시리즈 파일에서 자동으로 만들어집니다. 새 시리즈는 `src/content/series/<slug>.md` 하나면 됩니다.
+
+## 프로젝트 이미지
+
+프로젝트마다 폴더 하나에 두 장을 넣습니다. 폴더 이름은 프로젝트 파일 이름과 같게.
+
+```
+src/assets/projects/<slug>/cover.png   정방형 썸네일 (목록 타일, 시리즈 카드)
+src/assets/projects/<slug>/main.png    전체 화면 캡처 (상세 페이지 맨 위, 자르지 않고 표시)
+```
+
+- PNG, JPG, WebP 모두 됩니다. 원본 그대로 넣어도 빌드할 때 웹용 크기의 WebP로 자동 변환됩니다.
+- 설정 줄은 필요 없습니다. 파일을 넣거나 같은 이름으로 덮어쓰고 푸시하면 반영됩니다.
+- `cover`가 없으면 이름이 들어간 타일로, `main`이 없으면 `cover`로 대신 보여 줍니다.
+- 상세 페이지의 메인 이미지를 누르면 첫 번째 체험 주소가 열립니다.
 
 ## 실행형 페이지
 

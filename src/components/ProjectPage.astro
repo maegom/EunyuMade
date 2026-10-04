@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import StatusChip from './StatusChip.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { kindLabel, statusLabel, soloLabel, projectHref, getPlays, isExternal } from '../data/site';
+import { projectImage } from '../data/images';
 
 interface Props { entry: CollectionEntry<'projects'> }
 const { entry } = Astro.props;
@@ -22,10 +23,18 @@ const idx = siblings.findIndex((s) => s.id === entry.id);
 const next = siblings.slice(idx + 1).find((s) => s.data.status !== 'idea') ?? siblings.find((s) => s.id !== entry.id && s.data.status !== 'idea');
 // 이어짐은 다른 시리즈의 프로젝트로도 연결됩니다.
 const rel = d.relations.map((r) => ({ ...r, target: all.find((s) => s.id === r.slug) }));
-const cover = d.cover ?? series?.data.cover;
 const plays = getPlays(d);
+// 이미지: src/assets/projects/<slug>/main.* (전체 화면 캡처, 자르지 않고 표시), cover.* (정방형 썸네일)
+const mainImg = await projectImage(entry.id, 'main', 1600);
+// main이 있으면 cover는 이 페이지에서 쓰지 않으므로 만들지 않습니다.
+const cover = mainImg ? undefined : ((await projectImage(entry.id, 'cover', 1200))?.src ?? d.cover ?? series?.data.cover);
+const og = mainImg
+  ? (await projectImage(entry.id, 'main', 1200, 'jpg'))?.src
+  : ((await projectImage(entry.id, 'cover', 1200, 'jpg'))?.src ?? d.cover ?? series?.data.cover);
+const firstPlay = plays[0];
+const firstExt = firstPlay ? isExternal(firstPlay.url) : false;
 ---
-<Base title={d.title} description={d.one_line} ogImage={cover}>
+<Base title={d.title} description={d.one_line} ogImage={og}>
   <main class="container page">
     <div class="crumb"><a href="/">만든 것</a><span>›</span><a href={groupHref}>{groupTitle}</a><span>›</span><span>{d.title}</span></div>
     <div class="page-head">
@@ -36,13 +45,21 @@ const plays = getPlays(d);
       <div class="page-tags"><span class="chip">{kindLabel[d.kind]}</span><StatusChip status={d.status} /></div>
     </div>
 
-    <div class="hero-media">
-      {d.hero
-        ? <video src={d.hero} autoplay muted loop playsinline poster={cover}></video>
-        : cover
-          ? <img src={cover} alt={`${d.title} 대표 이미지`} />
-          : <div class="placeholder"><b>{d.title}</b>영상이 들어올 자리입니다</div>}
-    </div>
+    {d.hero ? (
+      <div class="hero-media"><video src={d.hero} autoplay muted loop playsinline poster={mainImg?.src ?? cover}></video></div>
+    ) : mainImg ? (
+      firstPlay ? (
+        <a class="hero-shot" href={firstPlay.url} target={firstExt ? '_blank' : undefined} rel={firstExt ? 'noopener' : undefined} title="실행 화면 열기">
+          <img src={mainImg.src} width={mainImg.width} height={mainImg.height} alt={`${d.title} 실행 화면`} />
+        </a>
+      ) : (
+        <div class="hero-shot"><img src={mainImg.src} width={mainImg.width} height={mainImg.height} alt={`${d.title} 화면`} /></div>
+      )
+    ) : cover ? (
+      <div class="hero-media"><img src={cover} alt={`${d.title} 대표 이미지`} /></div>
+    ) : (
+      <div class="hero-media"><div class="placeholder"><b>{d.title}</b>이미지가 들어올 자리입니다</div></div>
+    )}
 
     <div class="two">
       <div>

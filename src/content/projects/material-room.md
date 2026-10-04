@@ -9,7 +9,6 @@ one_line: 같은 형태, 다른 감각. 네 가지 소재를 비교하는 인터
 inputs: 드래그 회전 · 조명 방향 · 표면 거칠기 · 소재 선택
 outputs: 소재별 3D 비교 · 분해도 · 나의 소재 보드
 tech: [Three.js, WebGL]
-cover: https://materialroom.eunyumade.com/assets/silver.png
 order: 2
 plays:
   - label: 소재 탐색

@@ -4,6 +4,7 @@ import Tile from '../components/Tile.astro';
 import type { TileItem } from '../components/Tile.astro';
 import { getCollection } from 'astro:content';
 import { site, soloLabel, projectHref, getPlays } from '../data/site';
+import { projectImage } from '../data/images';
 
 const seriesAll = (await getCollection('series')).sort((a, b) => a.data.order - b.data.order);
 const seriesOf = (id?: string) => (id ? seriesAll.find((s) => s.id === id) : undefined);
@@ -20,19 +21,23 @@ const projects = (await getCollection('projects'))
       a.data.order - b.data.order
   );
 
-const items: TileItem[] = projects.map((p) => ({
-  title: p.data.title,
-  href: projectHref(p.data.series, p.id),
-  kind: p.data.kind,
-  status: p.data.status,
-  series: seriesOf(p.data.series)?.data.title ?? soloLabel,
-  cat: p.data.series ?? 'solo',
-  cover: p.data.cover, // 사진이 없으면 이름이 들어간 타일로 표시됩니다.
-  loop: p.data.loop,
-  one_line: p.data.one_line,
-  plays: getPlays(p.data),
-  featured: p.data.featured,
-}));
+// 썸네일: src/assets/projects/<slug>/cover.* 가 있으면 자동으로 씁니다. 없으면 파일의 cover 줄, 그것도 없으면 이름 타일.
+const items: TileItem[] = await Promise.all(
+  projects.map(async (p, i) => ({
+    title: p.data.title,
+    href: projectHref(p.data.series, p.id),
+    kind: p.data.kind,
+    status: p.data.status,
+    series: seriesOf(p.data.series)?.data.title ?? soloLabel,
+    cat: p.data.series ?? 'solo',
+    cover: (await projectImage(p.id, 'cover', 800))?.src ?? p.data.cover,
+    loop: p.data.loop,
+    one_line: p.data.one_line,
+    plays: getPlays(p.data),
+    featured: p.data.featured,
+    eager: i < 4,
+  }))
+);
 
 // 은유제작소 자체(정체성 프로젝트)도 독립 프로젝트 하나로 올립니다.
 items.push({
