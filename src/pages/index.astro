@@ -54,16 +54,12 @@ const cats = [
   ...(items.some((i) => i.cat === 'solo') ? [{ id: 'solo', label: soloLabel, tagline: '시리즈에 묶이지 않는 하나짜리 작업', href: '' }] : []),
 ];
 const count = (id: string) => items.filter((i) => i.cat === id).length;
-const nowList = projects.filter((p) => ['prototype', 'making'].includes(p.data.status)).map((p) => p.data.title);
 ---
 <Base>
   <main class="container">
     <section class="intro">
       <h1>은유제작소가 만든 것들.</h1>
       <p class="intro-sub">{site.tagline}</p>
-      {nowList.length > 0 && (
-        <p class="now"><span class="now-dot" aria-hidden="true"></span>지금 만드는 중: {nowList.join(', ')}</p>
-      )}
     </section>
 
     {cats.length > 1 && (

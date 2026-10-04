@@ -24,6 +24,10 @@ const mailHref = `mailto:${site.email}?subject=${encodeURIComponent('[은유제�
       .cbtn:hover{transform:translateY(-1px);border-color:var(--blue)}
       .cbtn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
       .cbtn.primary:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
+      /* 인스타그램 아이콘의 색: 보라 → 분홍 → 주황 → 노랑. 글자가 놓이는 왼쪽을 진한 쪽으로. */
+      .cbtn.insta{color:#fff;border-color:transparent;background:linear-gradient(90deg,#833AB4 0%,#C13584 32%,#E1306C 58%,#F77737 84%,#FCAF45 100%);background-origin:border-box}
+      .cbtn.insta:hover{border-color:transparent;filter:brightness(1.07)}
+      .cbtn.insta .sub{color:rgba(255,255,255,.92)}
       .cbtn .l{display:flex;align-items:center;gap:10px}
       .cbtn svg{width:20px;height:20px;flex:none}
       .cbtn .sub{font-weight:500;font-size:13px;color:var(--ink3);white-space:nowrap}
@@ -42,11 +46,11 @@ const mailHref = `mailto:${site.email}?subject=${encodeURIComponent('[은유제�
     </section>
     <nav class="clinks" aria-label="바로가기">
       {instagram && (
-        <a class="cbtn primary" href={instagram} target="_blank" rel="noopener">
+        <a class="cbtn insta" href={instagram} target="_blank" rel="noopener">
           <span class="l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>Instagram</span><span class="sub">↗</span>
         </a>
       )}
-      <a class="cbtn" href="/?from=card">홈페이지 <span class="sub">eunyumade.com</span></a>
+      <a class="cbtn primary" href="/?from=card">홈페이지 <span class="sub">eunyumade.com</span></a>
       <a class="cbtn" href="/happy?from=card">HAPPY 시리즈 <span class="sub">보기</span></a>
       {youtube && <a class="cbtn" href={youtube} target="_blank" rel="noopener">YouTube <span class="sub">↗</span></a>}
       {store && <a class="cbtn" href={store} target="_blank" rel="noopener">스토어 <span class="sub">↗</span></a>}

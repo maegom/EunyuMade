@@ -36,7 +36,6 @@ h1,h2,h3{text-wrap:balance;line-height:1.25}
 .intro{padding:56px 0 6px}
 .intro h1{font-size:clamp(26px,3.4vw,36px);font-weight:700;letter-spacing:-.02em;margin:0}
 .intro-sub{margin:6px 0 0;color:var(--ink2);font-size:16px}
-.now{margin:10px 0 0;color:var(--ink3);font-size:13.5px;font-family:var(--mono)}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:26px 0 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .tab{border:1px solid var(--line2);background:var(--surface);color:var(--ink2);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s,color .15s}
 .tab:hover{border-color:var(--blue)}
@@ -46,8 +45,6 @@ h1,h2,h3{text-wrap:balance;line-height:1.25}
 .strip b{display:block;font-size:15px}
 .strip span{font-size:13.5px;color:var(--ink2)}
 .strip[hidden]{display:none}
-.now-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--blue);margin-right:8px;vertical-align:1px;animation:pulse 2.2s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.3}}
 .shelf{padding:30px 0 6px}
 .shelf-title{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .shelf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
