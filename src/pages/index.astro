@@ -100,6 +100,11 @@ const nowList = projects.filter((p) => ['prototype', 'making'].includes(p.data.s
     try { history.replaceState(null, '', cat === 'all' ? location.pathname : `#${cat}`); } catch {}
   }
   tabs.forEach((t) => t.addEventListener('click', () => pick(t.dataset.cat || 'all')));
-  const initial = location.hash.slice(1);
-  if (initial && tabs.some((t) => t.dataset.cat === initial)) pick(initial);
+  // 주소의 #분류로 바로 열기 (예: /#study). 같은 페이지 안에서 해시만 바뀌어도 반영합니다.
+  const fromHash = () => {
+    const h = location.hash.slice(1);
+    return h && tabs.some((t) => t.dataset.cat === h) ? h : '';
+  };
+  if (fromHash()) pick(fromHash());
+  window.addEventListener('hashchange', () => pick(fromHash() || 'all'));
 </script>
