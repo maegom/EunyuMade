@@ -14,6 +14,8 @@ plays:
     url: https://drape.eunyumade.com/
     note: 천을 잡아서 당기고 놓아 보세요. 불러온 이미지는 내 기기에서만 처리됩니다.
 relations:
+  - slug: gyeol
+    note: 일곱 가지 원단의 물성을 만져 보는 실험실
   - slug: material-room
     note: 소재를 비교하던 MATERIAL ROOM에서 이어진 원단 편
 ---

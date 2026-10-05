@@ -8,7 +8,7 @@ one_line: 기억을 따라 흐르는 기타. 스크롤로 감상하고 나만의
 inputs: 스크롤 · 드래그 · 카메라 키프레임 · 조명 설정 · GLB 모델
 outputs: 시네마틱 장면 시퀀스 · 시퀀스 JSON 내보내기
 tech: [Three.js, WebGL, glTF]
-order: 4
+order: 5
 plays:
   - label: 전시 보기
     url: https://recuerdo.eunyumade.com/
