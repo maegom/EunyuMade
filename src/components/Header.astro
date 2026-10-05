@@ -3,10 +3,10 @@ import { site } from '../data/site';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const nav = [
   { href: '/', label: '만든 것' },
-  { href: '/happy', label: 'HAPPY' },
   { href: '/about', label: '은유제작소' },
 ];
-const isActive = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(href + '/'));
+// '만든 것'은 홈과 모든 프로젝트 페이지에서 켜집니다.
+const isActive = (href: string) => (href === '/' ? path !== '/about' && path !== '/card' : path === href || path.startsWith(href + '/'));
 ---
 <header class="site-header">
   <div class="container header-row">

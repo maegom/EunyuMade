@@ -1,100 +1,25 @@
 ---
-import Base from '../../layouts/Base.astro';
-import { getCollection, render } from 'astro:content';
-import { kindLabel, getPlays, isExternal } from '../../data/site';
-import { projectImage } from '../../data/images';
+// 시리즈 전용 페이지는 두지 않습니다. 예전 주소(/happy 등)로 들어오면 홈의 해당 분류로 보냅니다.
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const all = await getCollection('series');
-  return all.map((entry) => ({ params: { series: entry.id }, props: { entry } }));
+  return all.map((entry) => ({ params: { series: entry.id } }));
 }
-const { entry } = Astro.props;
-const { Content } = await render(entry);
-const allProjects = await getCollection('projects');
-const members = allProjects.filter((p) => p.data.series === entry.id).sort((a, b) => a.data.order - b.data.order);
-const ideas = members.filter((m) => m.data.status === 'idea');
-// 이어짐은 다른 시리즈의 프로젝트로도 연결됩니다.
-const threads = members.flatMap((m) =>
-  m.data.relations.map((r) => ({ from: m.data.title, to: allProjects.find((x) => x.id === r.slug)?.data.title ?? r.slug, note: r.note }))
-);
-// 구성원 썸네일: src/assets/projects/<slug>/cover.* 자동 사용
-const covers = new Map<string, string | undefined>();
-for (const m of members) covers.set(m.id, (await projectImage(m.id, 'cover', 640))?.src ?? m.data.cover);
-// 허브 대표 이미지: 시리즈 파일의 cover, 없으면 첫 구성원의 썸네일
-const lead = members.find((m) => m.data.status !== 'idea');
-const hubArt = entry.data.cover ?? (lead ? (await projectImage(lead.id, 'cover', 1000))?.src : undefined);
+const { series } = Astro.params;
+const to = `/#${series}`;
 ---
-<Base title={`${entry.data.title} 시리즈`} description={entry.data.description} ogImage={entry.data.cover}>
-  <main class="container page">
-    <div class="crumb"><a href="/">만든 것</a><span>›</span><span>{entry.data.title} 시리즈</span></div>
-    <div class="hub-hero">
-      <div>
-        <h1 class="page-title">{entry.data.title}</h1>
-        <p class="page-sub">{entry.data.tagline}</p>
-        <p class="muted" style="margin-top:14px">{entry.data.description}</p>
-      </div>
-      {hubArt && <div class="art"><img src={hubArt} alt={`${entry.data.title} 대표 이미지`} /></div>}
-    </div>
-
-    <h2 class="sec-title">구성원</h2>
-    <div class="members">
-      {members.map((m) => {
-        const dim = m.data.status === 'idea';
-        const href = `/${entry.id}/${m.id}`;
-        const cover = covers.get(m.id);
-        const plays = getPlays(m.data);
-        const many = plays.length > 3;
-        return (
-          <article class:list={['member', { dim }]}>
-            {cover && <span class="member-art"><img src={cover} alt="" loading="lazy" /></span>}
-            {m.data.verb && <span class="member-verb">{m.data.verb}</span>}
-            <span class="member-name">{dim ? m.data.title : <a class="member-link" href={href}>{m.data.title}</a>}</span>
-            <span class="member-line">{m.data.one_line}</span>
-            {plays.length > 0 && !dim && (
-              <span class="play-row">
-                {many
-                  ? <a class="play-pill" href={`${href}#play`}>실행하기 · {plays.length}개 →</a>
-                  : plays.map((p) => {
-                      const ext = isExternal(p.url);
-                      return <a class="play-pill" href={p.url} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined}>{plays.length === 1 ? '실행하기' : p.label}{ext ? ' ↗' : ''}</a>;
-                    })}
-              </span>
-            )}
-            <span class="member-foot"><span>{kindLabel[m.data.kind]}{m.data.year ? ` · ${m.data.year}` : ''}</span></span>
-          </article>
-        );
-      })}
-    </div>
-
-    <div class="two">
-      <div>
-        <h2 class="sec-title">이야기</h2>
-        <div class="prose"><Content /></div>
-        {threads.length > 0 && (
-          <>
-            <h2 class="sec-title">이어짐</h2>
-            <ul class="thread">
-              {threads.map((t) => <li><b>{t.from} → {t.to}</b><span class="muted">{t.note}</span></li>)}
-            </ul>
-          </>
-        )}
-      </div>
-      <div>
-        {entry.data.common.length > 0 && (
-          <>
-            <h2 class="sec-title">공통 요소</h2>
-            <ul class="common">{entry.data.common.map((c) => <li>{c}</li>)}</ul>
-          </>
-        )}
-        {ideas.length > 0 && (
-          <>
-            <h2 class="sec-title">다음 구성원</h2>
-            <ul class="common">
-              {ideas.map((m) => <li><b>{m.data.title}</b>{m.data.verb && ` · ${m.data.verb}`} <span class="muted">— {m.data.one_line}</span></li>)}
-            </ul>
-          </>
-        )}
-      </div>
-    </div>
-  </main>
-</Base>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>은유제작소 | EUNYU MADE</title>
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0;url=${to}`} />
+    <link rel="canonical" href="https://www.eunyumade.com/" />
+  </head>
+  <body>
+    <p><a href={to}>은유제작소가 만든 것들로 이동</a></p>
+    <script is:inline define:vars={{ to }}>location.replace(to);</script>
+  </body>
+</html>

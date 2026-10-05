@@ -10,7 +10,7 @@ src/
     projects/   프로젝트 하나 = 파일 하나 (예: malangmung.md)
     series/     시리즈 하나 = 파일 하나 (예: happy.md)
   data/site.ts  이름, 메일, 로고 경로, 소셜 링크 (비어 있으면 사이트에 표시되지 않음)
-  pages/        / (전체 목록), /[series] (시리즈 허브), /[series]/[slug], /works/[slug], /about, /card, 404
+  pages/        / (전체 목록과 분류 탭), /[series]/[slug] (시리즈 소속 프로젝트), /works/[slug] (그 외), /about, /card, 404
   components/ProjectPage.astro   프로젝트 상세 페이지 템플릿
 public/
   assets/logo/    eunyu-logo.png (로고), eunyu-mark.png (픽토그램)
@@ -32,7 +32,6 @@ design/logo-src/  로고 원본 보관 (서빙되지 않음)
 ---
 title: 말랑멍
 series: happy            # 생략하면 "그 외"로 분류
-verb: 만지기             # 시리즈 허브에서 이름 위에 붙는 한 단어 (선택)
 kind: web                # web | object | installation | experiment
 status: idea             # 아직 아이디어뿐이라 목록에서 감추고 싶을 때만 씁니다. 평소에는 이 줄을 빼세요
 year: 2026
@@ -63,7 +62,8 @@ traces:
 ```
 
 - 이미지는 아래 "프로젝트 이미지" 규칙대로 폴더에 넣기만 하면 됩니다.
-- `status: idea`인 프로젝트는 목록에 오르지 않고 시리즈 허브의 "다음 구성원"에만 표시됩니다. 그 밖의 상태는 화면에 표시하지 않습니다.
+- `status: idea`인 프로젝트는 목록에 오르지 않습니다. 그 밖의 상태는 화면에 표시하지 않습니다.
+- 시리즈 전용 페이지는 없습니다. `/happy` 같은 주소로 들어오면 홈의 해당 분류 탭(`/#happy`)으로 넘어갑니다.
 - 목록의 분류 탭은 시리즈 파일에서 자동으로 만들어집니다. 새 시리즈는 `src/content/series/<slug>.md` 하나면 됩니다.
 
 ## 프로젝트 이미지

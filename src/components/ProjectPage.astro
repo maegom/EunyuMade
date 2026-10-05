@@ -11,7 +11,8 @@ const { Content } = await render(entry);
 const d = entry.data;
 const series = d.series ? (await getCollection('series')).find((s) => s.id === d.series) : undefined;
 const groupTitle = series?.data.title ?? soloLabel;
-const groupHref = series ? `/${series.id}` : '/#solo';
+// 분류 링크는 홈의 해당 분류 탭으로 갑니다 (시리즈 전용 페이지는 없음).
+const groupHref = series ? `/#${series.id}` : '/#solo';
 
 // 같은 묶음 안에서 다음 프로젝트 (아이디어 단계 제외)
 const all = await getCollection('projects');

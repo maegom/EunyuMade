@@ -79,7 +79,6 @@ const count = (id: string) => items.filter((i) => i.cat === id).length;
     {cats.map((c) => (
       <div class="strip" data-strip={c.id} hidden>
         <div><b>{c.label}</b><span>{c.tagline}</span></div>
-        {c.href && <a class="btn small" href={c.href}>시리즈 페이지 →</a>}
       </div>
     ))}
 

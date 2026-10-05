@@ -15,6 +15,8 @@ plays:
     url: https://materialroom.eunyumade.com/
     note: 돔 램프 하나를 브러시드 실버, 반투명 블루, 매트 차콜, 유광 아이보리로 바꿔 보고 마음에 드는 소재를 보드에 담습니다.
 relations:
+  - slug: drape
+    note: 같은 방에서 이어진 원단 편
   - slug: pocketmung-inside
     note: 같은 방식으로 제품의 안쪽을 열어 보는 스터디
 ---
